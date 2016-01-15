@@ -1,0 +1,46 @@
+{%  set config = get_config() %}
+{% if pagination.getRecords|length > 0 %}
+    <div class="box">
+        <div class="box-body">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans %}Nombres{% endtrans %}</th>
+                    <th>{% trans %}Apellidos{% endtrans %}</th>
+                    <th>{% trans %}Correo{% endtrans %}</th>
+                    <th>{% trans %}Cedula{% endtrans %}</th>
+                    <th class="text-center">{% trans %}Estado{% endtrans %}</th>
+                    <th class="text-center">{% trans %}Acciones{% endtrans %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for supervisor in pagination.getRecords %}
+                    <tr>
+                        <td width="20%">{{ supervisor.nombres }}</td>
+                        <td width="20%">{{ supervisor.apellidos }}</td>
+                        <td width="10%">{{ supervisor.correo }}</td>
+                        <td width="10%">{{ supervisor.cedula }}</td>
+                        <td width="10%">{{ config.estado_user[supervisor.estado] }}</td>
+                        <td align="center">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default" onclick="supervisor.launchEdit({{ supervisor.id }})"><i class="fa fa-edit"></i> {% trans %}Editar{% endtrans %}</button>
+                                <button type="button" class="btn btn-default" onclick="supervisor.eliminar({{ supervisor.id }})"><i class="fa fa-remove"></i> {% trans %}Eliminar{% endtrans %}</button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr></tr>
+                </tbody>
+            </table>
+        </div>
+        {% if pagination.getRecords|length > 0 and pagination.getPaginas > 1 %}
+        <div class="box-footer">
+            {% include 'pagination.html.twig' with {'id': 'paginationSupervisor'} %}
+        </div>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        {% trans %}<strong>Advertencia!</strong> No hay registros disponibles.{% endtrans %}
+    </div>
+{% endif %}

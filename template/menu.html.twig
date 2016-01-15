@@ -17,3 +17,27 @@
         </ul>
     {% endif %}
 </li>
+<li class="treeview">
+    {% set url_estudiante = 'index.php?m=ManagerMail&c=Estudiante' %}
+    <a href="{{ get_url(url_estudiante) }}">
+        <i class="fa fa-files-o"></i>
+        <span>{% trans %}Estudiantes{% endtrans %}</span>
+    </a>
+    <ul class="treeview-menu">
+        <li><a href="{{ get_url(url_estudiante) }}"><i class="fa fa-circle-o"></i> {% trans %}Listado{% endtrans %}</a></li>
+        <li><a href="{{ get_url(url_estudiante ~ '&a=Add') }}"><i class="fa fa-circle-o"></i> {% trans %}Agregar nuevo{% endtrans %}</a></li>
+        <li><a href="{{ get_url(url_estudiante ~ '&a=import') }}"><i class="fa fa-circle-o"></i> {% trans %}Importar{% endtrans %}</a></li>
+    </ul>
+</li>
+<li class="treeview">
+    {% set url_supervisor = 'index.php?m=ManagerMail&c=Supervisor' %}
+    <a href="{{ get_url(url_supervisor) }}">
+        <i class="fa fa-files-o"></i>
+        <span>{% trans %}Supervisores{% endtrans %}</span>
+    </a>
+    <ul class="treeview-menu">
+        <li><a href="{{ get_url(url_supervisor) }}"><i class="fa fa-circle-o"></i> {% trans %}Listado{% endtrans %}</a></li>
+        <li><a href="{{ get_url(url_supervisor ~ '&a=Add') }}"><i class="fa fa-circle-o"></i> {% trans %}Agregar nuevo{% endtrans %}</a></li>
+        <li><a href="{{ get_url(url_supervisor ~ '&a=import') }}"><i class="fa fa-circle-o"></i> {% trans %}Importar{% endtrans %}</a></li>
+    </ul>
+</li>

@@ -15,7 +15,8 @@ class CoreRoute {
         "logged" => array(
             "main/index",
             "login/main/logout",
-            "user/main/(edit|save)"
+            "user/main/(edit|save)",
+            "managermail/(estudiante|supervisor)/(index|listado|add|edit|save|delete|import|model)"
         ),
         "admin" => array(
             "user/main/(index|listado|add|edit|delete|save)"
@@ -55,6 +56,7 @@ class CoreRoute {
         $loader->addPath(TEMPLATES . "module/user/", 'ModuleUser');
         $loader->addPath(TEMPLATES . "module/login/", 'ModuleLogin');
         $loader->addPath(TEMPLATES . "modales/", 'Modal');
+        $loader->addPath(TEMPLATES . "module/managermail/", 'ModuleManagerMail');
         return $loader;
     }
 

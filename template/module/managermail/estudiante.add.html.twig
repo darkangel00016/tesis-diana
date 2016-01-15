@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+
+{% block head %}
+    <link rel="stylesheet" href="lib/AdminLTE-2.3.0/plugins/select2/select2.min.css" />
+    <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/select2/select2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="js/estudiante.js"></script>
+{% endblock %}
+
+{% block footer %}
+    <script type="text/javascript">
+        //Initialize Select2 Elements
+        $(".select2").select2();
+        estudiante.init();
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% set user = session_user() %}
+    <div class="box">
+        <div class="box-body">
+            <div id="containerLoading"></div>
+            <form class="form-horizontal" id="formEstudiante">
+                <input type="hidden" id="inputId" name="inputId" {% if record %} value="{{ record.getId }}" {% endif %}>
+                <div class="form-group">
+                    <label for="inputNombres" class="col-sm-2 control-label">{% trans %}Nombres{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputNombres" name="inputNombres" placeholder="{% trans %}Nombres{% endtrans %}" {% if record %} value="{{ record.getNombres }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputApellidos" class="col-sm-2 control-label">{% trans %}Apellidos{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputApellidos" name="inputApellidos" placeholder="{% trans %}Apellidos{% endtrans %}" {% if record %} value="{{ record.getApellidos }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCorreo" class="col-sm-2 control-label">{% trans %}Correo{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="inputCorreo" name="inputCorreo" placeholder="{% trans %}Correo{% endtrans %}" {% if record %} value="{{ record.getCorreo }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCedula" class="col-sm-2 control-label">{% trans %}Cedula{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputCedula" name="inputCedula" placeholder="{% trans %}Cedula{% endtrans %}" {% if record %} value="{{ record.getCedula }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputTipo" class="col-sm-2 control-label">{% trans %}Estado{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" id="inputEstado" name="inputEstado" style="width: 100%">
+                            <option value="1" {% if record and record.getEstado == '1' %} selected {% endif %}>{% trans %}Activo{% endtrans %}</option>
+                            <option value="0" {% if record and record.getEstado == '0' %} selected {% endif %}>{% trans %}Inactivo{% endtrans %}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-danger" id="buttonEstudianteCancel">{% trans %}Cancelar{% endtrans %}</button>
+                        <button type="button" class="btn btn-primary" id="buttonEstudiante">{% trans %}Guardar{% endtrans %}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
