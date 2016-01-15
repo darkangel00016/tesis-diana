@@ -1,0 +1,99 @@
+{% extends "base.html.twig" %}
+
+{% block head %}
+    <link rel="stylesheet" href="lib/AdminLTE-2.3.0/plugins/select2/select2.min.css" />
+    <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/select2/select2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+{% endblock %}
+
+{% block footer %}
+    <script type="text/javascript">
+        //Initialize Select2 Elements
+        $(".select2").select2();
+        config.init();
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% set config = get_config() %}
+    <div id="containerLoading"></div>
+    <form class="form-horizontal" id="formMetodo">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Correo
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="inputMetodo" class="col-sm-2 control-label">{% trans %}Dominio{% endtrans %}</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputHost" name="inputHost" placeholder="{% trans %}Dominio{% endtrans %}" value="{{ config.host }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputUser" class="col-sm-2 control-label">{% trans %}Usuario{% endtrans %}</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputUser" name="inputUser" placeholder="{% trans %}Usuario{% endtrans %}" value="{{ config.usuario }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputClave" class="col-sm-2 control-label">{% trans %}Clave{% endtrans %}</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputClave" name="inputClave" placeholder="{% trans %}Clave{% endtrans %}" value="{{ config.clave }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputFrom" class="col-sm-2 control-label">{% trans %}De (correo){% endtrans %}</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputFrom" name="inputFrom" placeholder="{% trans %}De (correo){% endtrans %}" value="{{ config.from }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputFromSubject" class="col-sm-2 control-label">{% trans %}De (asunto){% endtrans %}</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputFromSubject" name="inputFromSubject" placeholder="{% trans %}De (asunto){% endtrans %}" value="{{ config.subject }}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingThree">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Fecha
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="inputFormatoFechaCorta" class="col-sm-2 control-label">{% trans %}Formato fecha corta{% endtrans %}</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputFormatoFechaCorta" name="inputFormatoFechaCorta" placeholder="{% trans %}Formato fecha corta{% endtrans %}" value="{{ config.formato_fecha_corta }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputFormatoFechaLarga" class="col-sm-2 control-label">{% trans %}Formato fecha larga{% endtrans %}</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputFormatoFechaLarga" name="inputFormatoFechaLarga" placeholder="{% trans %}Formato fecha corta{% endtrans %}" value="{{ config.formato_fecha_larga }}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-danger" id="buttonConfigCancel">{% trans %}Cancelar{% endtrans %}</button>
+                <button type="button" class="btn btn-primary" id="buttonConfig">{% trans %}Guardar{% endtrans %}</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -16,10 +16,12 @@ class CoreRoute {
             "main/index",
             "login/main/logout",
             "user/main/(edit|save)",
-            "managermail/(estudiante|supervisor)/(index|listado|add|edit|save|delete|import|model)"
+            "managermail/(estudiante|supervisor)/(index|listado)",
         ),
         "admin" => array(
-            "user/main/(index|listado|add|edit|delete|save)"
+            "user/main/(index|listado|add|edit|delete|save)",
+            "configuracion/main/(index|add|edit|delete|save)",
+            "managermail/(estudiante|supervisor)/(index|listado|add|edit|save|delete|import|model)"
         )
     );
 
@@ -28,6 +30,8 @@ class CoreRoute {
     static function ini($twig) {
 
         self::db();
+
+        self::filter($twig);
 
         $module = (isset($_REQUEST["m"]))?$_REQUEST["m"]:"";
         $controller = (isset($_REQUEST["c"]))?$_REQUEST["c"]:DEFAULT_CONTROLLER;
@@ -57,6 +61,7 @@ class CoreRoute {
         $loader->addPath(TEMPLATES . "module/login/", 'ModuleLogin');
         $loader->addPath(TEMPLATES . "modales/", 'Modal');
         $loader->addPath(TEMPLATES . "module/managermail/", 'ModuleManagerMail');
+        ModuleConfiguracionConfig::twig($loader);
         return $loader;
     }
 
@@ -184,17 +189,8 @@ class CoreRoute {
 
     public static function getConfig()
     {
-        $config = array();
-        $config["tipo_user"] = array(
-            "admin" => _("Admin"),
-            "usuario" => _("Usuario")
-        );
-        $config["estado_user"] = array(
-            "1" => _("Activo"),
-            "0" => _("Inactivo")
-        );
-        $config["formato_fecha_larga"] = "d/m/Y h:i a";
-        return $config;
+        $config = CoreConfig::getConfig();
+        return $config->getData();
     }
 
     private static function db()
@@ -205,6 +201,27 @@ class CoreRoute {
         } catch (Exception $e) {
 
         }
+    }
+
+    private static function filter(Twig_Environment &$twig)
+    {
+        $twig->addExtension(new Twig_Extensions_Extension_I18n());
+        $twig->addExtension(new Twig_Extension_Debug());
+
+        $function = new Twig_SimpleFunction('session_user', function () {
+            return CoreRoute::getUserLogged();
+        });
+        $twig->addFunction($function);
+
+        $function = new Twig_SimpleFunction('get_url', function ($ruta) {
+            return CoreRoute::getUrl($ruta);
+        });
+        $twig->addFunction($function);
+
+        $function = new Twig_SimpleFunction('get_config', function () {
+            return CoreRoute::getConfig();
+        });
+        $twig->addFunction($function);
     }
 
 } 

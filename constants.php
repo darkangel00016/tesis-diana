@@ -13,4 +13,4 @@ define("DB_USERNAME", "root");
 define("DB_PASSWORD", "123456");
 define("DB_NAME", "siemco");
 define("TEXDOMAINS", "siemco");
-define("URL", "http://localhost/tesis-diana/");
+define("URL", "http://localhost/tesis-diana-2/");

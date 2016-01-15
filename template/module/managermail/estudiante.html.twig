@@ -16,10 +16,13 @@
 {% endblock %}
 
 {% block content %}
+    {% set user = session_user() %}
     {% include '@ModuleManagerMail/estudiante.search.html.twig' %}
-    <div class="box-header">
-        <a href="index.php?m=ManagerMail&c=Estudiante&a=Add" class="btn btn-sm btn-info btn-flat pull-left">Nuevo estudiante</a>
-    </div>
+    {% if user.getTipo == "admin" %}
+        <div class="box-header">
+            <a href="index.php?m=ManagerMail&c=Estudiante&a=Add" class="btn btn-sm btn-info btn-flat pull-left">Nuevo estudiante</a>
+        </div>
+    {% endif %}
     <div id="containerLoading"></div>
     <div id="containerListadoEstudiante">
         {% include '@ModuleManagerMail/estudiante.listado.html.twig' %}

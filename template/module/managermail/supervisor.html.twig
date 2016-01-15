@@ -16,10 +16,13 @@
 {% endblock %}
 
 {% block content %}
+    {% set user = session_user() %}
     {% include '@ModuleManagerMail/supervisor.search.html.twig' %}
-    <div class="box-header">
-        <a href="index.php?m=ManagerMail&c=Supervisor&a=Add" class="btn btn-sm btn-info btn-flat pull-left">{% trans %}Nuevo supervisor{% endtrans %}</a>
-    </div>
+    {% if user.getTipo == "admin" %}
+        <div class="box-header">
+            <a href="index.php?m=ManagerMail&c=Supervisor&a=Add" class="btn btn-sm btn-info btn-flat pull-left">{% trans %}Nuevo supervisor{% endtrans %}</a>
+        </div>
+    {% endif %}
     <div id="containerLoading"></div>
     <div id="containerListadoSupervisor">
         {% include '@ModuleManagerMail/supervisor.listado.html.twig' %}
