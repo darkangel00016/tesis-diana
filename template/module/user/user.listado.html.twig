@@ -1,0 +1,44 @@
+{%  set config = get_config() %}
+{% if pagination.getRecords|length > 0 %}
+    <div class="box">
+        <div class="box-body">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans %}Nombre{% endtrans %}</th>
+                    <th>{% trans %}Usuario{% endtrans %}</th>
+                    <th class="text-center">{% trans %}Tipo{% endtrans %}</th>
+                    <th class="text-center">{% trans %}Estado{% endtrans %}</th>
+                    <th class="text-center">{% trans %}Acciones{% endtrans %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in pagination.getRecords %}
+                    <tr>
+                        <td width="30%">{{ user.nombre }}</td>
+                        <td width="30%">{{ user.usuario }}</td>
+                        <td width="10%">{{ config.tipo_user[user.tipo] }}</td>
+                        <td width="10%">{{ config.estado_user[user.estado] }}</td>
+                        <td align="center">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default" onclick="user.launchEdit({{ user.id }})"><i class="fa fa-edit"></i> {% trans %}Editar{% endtrans %}</button>
+                                <button type="button" class="btn btn-default" onclick="user.eliminar({{ user.id }})"><i class="fa fa-remove"></i> {% trans %}Eliminar{% endtrans %}</button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr></tr>
+                </tbody>
+            </table>
+        </div>
+        {% if pagination.getRecords|length > 0 and pagination.getPaginas > 1 %}
+        <div class="box-footer">
+            {% include 'pagination.html.twig' with {'id': 'paginatioUsers'} %}
+        </div>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        {% trans %}<strong>Advertencia!</strong> No hay registros disponibles.{% endtrans %}
+    </div>
+{% endif %}

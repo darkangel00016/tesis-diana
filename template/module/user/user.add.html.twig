@@ -1,0 +1,78 @@
+{% extends "base.html.twig" %}
+
+{% block head %}
+    <link rel="stylesheet" href="lib/AdminLTE-2.3.0/plugins/select2/select2.min.css" />
+    <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/select2/select2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="js/user.js"></script>
+{% endblock %}
+
+{% block footer %}
+    <script type="text/javascript">
+        //Initialize Select2 Elements
+        $(".select2").select2();
+        user.init();
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% set user = session_user() %}
+    <div class="box">
+        <div class="box-body">
+            <div id="containerLoading"></div>
+            <form class="form-horizontal" id="formUser">
+                <input type="hidden" id="inputId" name="inputId" {% if record %} value="{{ record.getId }}" {% endif %}>
+                <div class="form-group">
+                    <label for="inputNombre" class="col-sm-2 control-label">{% trans %}Nombre{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputNombre" name="inputNombre" placeholder="{% trans %}Nombre{% endtrans %}" {% if record %} value="{{ record.getNombre }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputUsuario" class="col-sm-2 control-label">{% trans %}Usuario{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputUsuario" name="inputUsuario" placeholder="{% trans %}Usuario{% endtrans %}" {% if record %} value="{{ record.getUsuario }}" {% endif %}>
+                    </div>
+                </div>
+                {% if user.getTipo == "admin" %}
+                <div class="form-group">
+                    <label for="inputTipo" class="col-sm-2 control-label">{% trans %}Tipo{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" id="inputTipo" name="inputTipo" style="width: 100%">
+                            <option value="admin" {% if record and record.getTipo == 'admin' %} selected {% endif %}>{% trans %}Admin{% endtrans %}</option>
+                            <option value="usuario" {% if record and record.getTipo == 'usuario' %} selected {% endif %}>{% trans %}Usuario{% endtrans %}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputTipo" class="col-sm-2 control-label">{% trans %}Estado{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" id="inputEstado" name="inputEstado" style="width: 100%">
+                            <option value="1" {% if record and record.getEstado == '1' %} selected {% endif %}>{% trans %}Activo{% endtrans %}</option>
+                            <option value="0" {% if record and record.getEstado == '0' %} selected {% endif %}>{% trans %}Inactivo{% endtrans %}</option>
+                        </select>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="inputPassword" class="col-sm-2 control-label">{% trans %}Contraseña{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="{% trans %}Contraseña{% endtrans %}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPasswordConfirmation" class="col-sm-2 control-label">{% trans %}Confirmar contraseña{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="inputPasswordConfirmation" name="inputPasswordConfirmation" placeholder="{% trans %}Confirmar contraseña{% endtrans %}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-danger" id="buttonUserCancel">{% trans %}Cancelar{% endtrans %}</button>
+                        <button type="button" class="btn btn-primary" id="buttonUser">{% trans %}Guardar{% endtrans %}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

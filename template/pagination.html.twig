@@ -1,0 +1,25 @@
+{% if pagination.getRecords|length > 0 and pagination.getPaginas > 1 %}
+    <div class="pull-right">
+        <ul class="pagination" id="{{ id }}">
+            {% if pagina > 1 %}
+                {% set prev_page = pagina - 1 %}
+            <li>
+                <a href="{{ pagination.getUrl }}&pagina={{ prev_page }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for i in 1..pagination.getPaginas %}
+                <li><a href="{{ pagination.getUrl }}&pagina={{ i }}">{{ i }}</a></li>
+            {% endfor %}
+            {% if pagina < pagination.getPaginas %}
+            <li>
+                {% set next_page = pagina + 1 %}
+                <a href="{{ pagination.getUrl }}&pagina={{ next_page }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}

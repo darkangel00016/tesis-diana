@@ -1,0 +1,114 @@
+<!-- base.html.twig -->
+{% set user = session_user() %}
+{% set config = get_config() %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ title }}</title>
+        <!-- Bootstrap core CSS -->
+        <link href="lib/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="js/jquery-1.11.3.min.js"></script>
+        <script src="lib/vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="lib/AdminLTE-2.3.0/dist/css/AdminLTE.min.css">
+        <link rel="stylesheet" href="lib/AdminLTE-2.3.0/dist/css/skins/_all-skins.min.css">
+        <link rel="stylesheet" href="css/general.css">
+        <script type="text/javascript" src="lib/AdminLTE-2.3.0/dist/js/app.min.js"></script>
+        <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <script type="text/javascript" src="js/core/mensajes.js"></script>
+        <script type="text/javascript" src="js/core/loading.js"></script>
+        {% block head %}{% endblock %}
+    </head>
+    <body class="skin-blue fixed">
+        <div class="wrapper">
+            <header class="main-header">
+                <!-- Logo -->
+                <a href="index.php" class="logo">
+                    <!-- mini logo for sidebar mini 50x50 pixels -->
+                    <span class="logo-mini">SIEMCO</span>
+                    <!-- logo for regular state and mobile devices -->
+                    <span class="logo-lg">SIEMCO</span>
+                </a>
+                <!-- Header Navbar: style can be found in header.less -->
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                        <span class="sr-only">Toggle navigation</span>
+                    </a>
+                    <!-- Navbar Right Menu -->
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown user user-menu">
+                                <a href="#" data-toggle="dropdown"><i class="fa fa-cogs"></i>&nbsp;{{ user.getNombre|raw }}</a>
+                                <ul class="dropdown-menu">
+                                    <!-- Menu Body -->
+                                    <li class="user-body">
+                                        <div class="row">
+                                            <div class="col-xs-12 text-center">
+                                                {% trans %}Ultima vez que inicio sesión:{% endtrans %}{{ user.getUltimoInicioSesion|date(config.formato_fecha_larga)  }}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- Menu Footer-->
+                                    <li class="user-footer">
+                                        <div class="pull-left">
+                                            <a href="{{ get_url('index.php?m=User&a=Edit&id=' ~ user.getId) }}" class="btn btn-default btn-flat">{% trans %}Editar cuenta{% endtrans %}</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a href="{{ get_url('index.php?m=Login&a=logout') }}" class="btn btn-default btn-flat">{% trans %}Cerrar sesión{% endtrans %}</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <div class="sidebar" id="scrollspy">
+                    <!-- sidebar menu: : style can be found in sidebar.less -->
+                    <ul class="nav sidebar-menu">
+                        {{ menu|raw }}
+                    </ul>
+                </div>
+                <!-- /.sidebar -->
+            </aside>
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <h1>{{ title }}</h1>
+                    <ol class="breadcrumb">
+                        <li><a href="index.php"><i class="fa fa-dashboard"></i> Inicio</a></li>
+                        {% if breadcrumb %}
+                            {% for b in breadcrumb %}
+                                <li><a href="{{ b.url }}">{{ b.text }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+                    </ol>
+                </div>
+
+                <!-- Main content -->
+                <div class="content body">
+                    {% block content %}{% endblock %}
+                </div><!-- /.content -->
+            </div><!-- /.content-wrapper -->
+
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs">
+                    <b>Version</b> 2.3.1
+                </div>
+                <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
+            </footer>
+        </div>
+        {% block footer %}{% endblock %}
+        {% include '@Modal/alert.html.twig' %}
+        {% include '@Modal/confirmation.html.twig' %}
+    </body>
+</html>

@@ -1,0 +1,19 @@
+<!-- menu.html.twig -->
+<li>
+    <a href="{{ get_url('index.php') }}">
+        <i class="fa fa-home"></i>
+        <span>{% trans %}Inicio{% endtrans %}</span>
+    </a>
+</li>
+<li class="treeview">
+    {% if user.getTipo == "admin" %}
+        <a href="{{ get_url('index.php?m=User') }}">
+            <i class="fa fa-files-o"></i>
+                <span>{% trans %}Usuarios{% endtrans %}</span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="{{ get_url('index.php?m=User') }}"><i class="fa fa-circle-o"></i> {% trans %}Listado{% endtrans %}</a></li>
+            <li><a href="{{ get_url('index.php?m=User&a=Add') }}"><i class="fa fa-circle-o"></i> {% trans %}Agregar nuevo{% endtrans %}</a></li>
+        </ul>
+    {% endif %}
+</li>
