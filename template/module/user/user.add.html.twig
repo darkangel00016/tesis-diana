@@ -45,11 +45,28 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="inputZona" class="col-sm-2 control-label">{% trans %}Zona{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" id="inputZona" name="inputZona" style="width: 100%" multiple>
+                            {% for zona in config.zonas %}
+                                {% set selected = false %}
+                                {% for oZona in record.zonas %}
+                                    {% if oZona.getZona == zona.id %}
+                                        {% set selected = true %}
+                                    {% endif %}
+                                {% endfor %}
+                                <option value="{{ zona.id }}" {% if selected %} selected {% endif %}>{{ zona.zona }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="inputTipo" class="col-sm-2 control-label">{% trans %}Estado{% endtrans %}</label>
                     <div class="col-sm-10">
                         <select class="form-control select2" id="inputEstado" name="inputEstado" style="width: 100%">
-                            <option value="1" {% if record and record.getEstado == '1' %} selected {% endif %}>{% trans %}Activo{% endtrans %}</option>
-                            <option value="0" {% if record and record.getEstado == '0' %} selected {% endif %}>{% trans %}Inactivo{% endtrans %}</option>
+                            {% for key, estado in config.estado_user %}
+                                <option value="{{ key }}" {% if record and record.getEstado == key %} selected {% endif %}>{{ estado }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>

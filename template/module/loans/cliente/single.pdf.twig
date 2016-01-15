@@ -1,0 +1,61 @@
+<style>
+    table {
+        color: #003300;
+        font-family: helvetica;
+        font-size: 8pt;
+    }
+    td.field {
+        background-color: #ffffee;
+    }
+    td.value {
+        background-color: #F8F8F8;
+    }
+</style>
+{% set config = get_config() %}
+{% set urls = config.urls %}
+{% include 'header.pdf.twig' %}
+<table cellpadding="4" cellspacing="1" width="100%">
+    {% if record.foto %}
+    <tr>
+        <td width="100%" align="center">
+            <img src="{{ get_url("") }}/images/{{ record.foto }}" />
+        </td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td width="20%" class="field"><b>ID</b></td>
+        <td width="80%" class="value">{{ record.id }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Nombres</b></td>
+        <td width="80%" class="value">{{ record.nombres }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Apellidos</b></td>
+        <td width="80%" class="value">{{ record.apellidos }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Teléfono</b></td>
+        <td width="80%" class="value">{{ record.telefono }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Dirección</b></td>
+        <td width="80%" class="value">{{ record.direccion }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Barrio</b></td>
+        <td width="80%" class="value">{{ record.barrio }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Ciudad</b></td>
+        <td width="80%" class="value">{{ record.ciudad }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Estado</b></td>
+        <td width="80%" class="value">{{ config.estado_user[record.estado] }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Calificación</b></td>
+        <td width="80%" class="value">{{ config.rate_cliente[record.rate] }}</td>
+    </tr>
+</table>

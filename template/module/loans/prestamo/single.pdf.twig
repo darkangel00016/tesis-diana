@@ -1,0 +1,87 @@
+<style>
+    table {
+        color: #003300;
+        font-family: helvetica;
+        font-size: 8pt;
+    }
+    th {
+        background-color: #cecece;
+    }
+    td.field {
+        background-color: #ffffee;
+    }
+    td.value {
+        background-color: #F8F8F8;
+    }
+</style>
+{% include 'header.pdf.twig' %}
+{% set config = get_config() %}
+<table cellpadding="4" cellspacing="1" width="100%">
+    <tr>
+        <td width="20%" class="field"><b>ID</b></td>
+        <td width="80%" class="value">{{ record.id }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Cliente</b></td>
+        <td width="80%" class="value">{{ record.cliente.nombres ~ ", " ~ record.cliente.apellidos }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Monto</b></td>
+        <td width="80%" class="value">{{ record.getMonto|currency }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Interes</b></td>
+        <td width="80%" class="value">{{ record.interes|interes }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Intervalo de cobro</b></td>
+        <td width="80%" class="value">{{ config.tipo_intervalo[record.tipo_intervalo] }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Duración</b></td>
+        <td width="80%" class="value">{{ record.intervalo }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Fecha de inicio</b></td>
+        <td width="80%" class="value">{{ record.fecha_inicio|date(config.formato_fecha_corta) }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Fecha fin</b></td>
+        <td width="80%" class="value">{{ record.fecha_fin|date(config.formato_fecha_corta) }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Monto interes</b></td>
+        <td width="80%" class="value">{{ record.monto_interes|currency }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Saldo</b></td>
+        <td width="80%" class="value">{{ record.saldo|currency }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Observaciones</b></td>
+        <td width="80%" class="value">{{ record.observaciones }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Estado</b></td>
+        <td width="80%" class="value">{{ config.estado_prestamo[record.estado] }}</td>
+    </tr>
+</table>
+<h3>Cuotas</h3>
+<table cellpadding="4" cellspacing="2">
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Monto</th>
+        <th>Interes</th>
+        <th>Estado</th>
+    </tr>
+    {% for item in record.cuotas %}
+        <tr>
+            <td class="value">{{ item.id }}</td>
+            <td class="value">{{ item.fecha|date(config.formato_fecha_corta) }}</td>
+            <td class="value">{{ item.monto|currency }}</td>
+            <td class="value">{{ item.interes|currency }}</td>
+            <td class="value">{{ config.estado_cuota[item.estado] }}</td>
+        </tr>
+    {% endfor %}
+</table>

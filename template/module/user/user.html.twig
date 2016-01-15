@@ -22,6 +22,6 @@
     </div>
     <div id="containerLoading"></div>
     <div id="containerListadoUser">
-        {% include '@ModuleUser/user.listado.html.twig' %}
+        {% include '@ModuleUser/user.listado.html.twig' with { 'tipo': 'normal' } %}
     </div>
 {% endblock %}

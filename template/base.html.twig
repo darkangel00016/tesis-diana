@@ -20,6 +20,10 @@
         <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/slimScroll/jquery.slimscroll.min.js"></script>
         <script type="text/javascript" src="js/core/mensajes.js"></script>
         <script type="text/javascript" src="js/core/loading.js"></script>
+        <script type="text/javascript" src="js/core/events.js"></script>
+        <script type="text/javascript">
+            var Urls = {{ config.urls|raw }};
+        </script>
         {% block head %}{% endblock %}
     </head>
     <body class="skin-blue fixed">
@@ -28,9 +32,9 @@
                 <!-- Logo -->
                 <a href="index.php" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini">SIEMCO</span>
+                    <span class="logo-mini">LOANS</span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg">SIEMCO</span>
+                    <span class="logo-lg">LOANS</span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top" role="navigation">
@@ -110,5 +114,6 @@
         {% block footer %}{% endblock %}
         {% include '@Modal/alert.html.twig' %}
         {% include '@Modal/confirmation.html.twig' %}
+        {% include '@Modal/search.html.twig' %}
     </body>
 </html>

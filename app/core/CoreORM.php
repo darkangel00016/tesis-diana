@@ -10,31 +10,6 @@
  * @link      http://github.com/joshcam/PHP-MySQLi-Database-Class
  * @version   2.6-master
  *
- * @method int count ()
- * @method dbObject ArrayBuilder()
- * @method dbObject JsonBuilder()
- * @method dbObject ObjectBuilder()
- * @method mixed byId (string $id, mixed $fields)
- * @method mixed get (mixed $limit, mixed $fields)
- * @method mixed getOne (mixed $fields)
- * @method mixed paginate (int $page, array $fields)
- * @method dbObject query ($query, $numRows)
- * @method dbObject rawQuery ($query, $bindParams, $sanitize)
- * @method dbObject join (string $objectName, string $key, string $joinType)
- * @method dbObject with (string $objectName)
- * @method dbObject groupBy (string $groupByField)
- * @method dbObject orderBy ($orderByField, $orderbyDirection, $customFields)
- * @method dbObject where ($whereProp, $whereValue, $operator)
- * @method dbObject orWhere ($whereProp, $whereValue, $operator)
- * @method dbObject setQueryOption ($options)
- * @method dbObject setTrace ($enabled, $stripPrefix)
- * @method dbObject withTotalCount ()
- * @method dbObject startTransaction ()
- * @method dbObject commit ()
- * @method dbObject rollback ()
- * @method dbObject ping ()
- * @method string getLastError ()
- * @method string getLastQuery ()
  **/
 class CoreORM {
     /**
@@ -42,13 +17,13 @@ class CoreORM {
      *
      * @var CoreORM
      */
-    private $db;
+    protected $db;
     /**
      * Models path
      *
      * @var modelPath
      */
-    protected static $modelPath;
+    public static $modelPath;
     /**
      * An array that holds object data
      *
@@ -98,13 +73,13 @@ class CoreORM {
      *
      * @var stating
      */
-    protected $primaryKey = 'id';
+    public $primaryKey = 'id';
     /**
      * Table name for an object. Class name will be used by default
      *
      * @var stating
      */
-    protected $dbTable;
+    public $dbTable;
     /**
      * @param array $data Data to preload on object creation
      */
@@ -131,7 +106,7 @@ class CoreORM {
      * @return mixed
      */
     public function __get ($name) {
-        if (isset ($this->data[$name]) && $this->data[$name] instanceof dbObject)
+        if (isset ($this->data[$name]) && $this->data[$name] instanceof CoreORM)
             return $this->data[$name];
         if (property_exists ($this, 'relations') && isset ($this->relations[$name])) {
             $relationType = strtolower ($this->relations[$name][0]);
@@ -156,41 +131,42 @@ class CoreORM {
         if (isset ($this->data[$name])) {
             return $this->data[$name];
         }
-        if (property_exists ($this->db, $name))
+        if (property_exists ($this->db, $name)){
             return $this->db->$name;
+        }
     }
     public function __isset ($name) {
         if (isset ($this->data[$name]))
             return isset ($this->data[$name]);
-        if (property_exists ($this->db, $name))
+        if (@property_exists ($this->db, $name))
             return isset ($this->db->$name);
     }
     public function __unset ($name) {
         unset ($this->data[$name]);
     }
     /**
-     * Helper function to create dbObject with Json return type
+     * Helper function to create CoreORM with Json return type
      *
-     * @return dbObject
+     * @return CoreORM
      */
     private function JsonBuilder () {
         $this->returnType = 'Json';
         return $this;
     }
     /**
-     * Helper function to create dbObject with Array return type
+     * Helper function to create CoreORM with Array return type
      *
-     * @return dbObject
+     * @return CoreORM
      */
     private function ArrayBuilder () {
         $this->returnType = 'Array';
         return $this;
     }
     /**
-     * Helper function to create dbObject with Object return type.
+     * Helper function to create CoreORM with Object return type.
      * Added for consistency. Works same way as new $objname ()
      *
-     * @return dbObject
+     * @return CoreORM
      */
     private function ObjectBuilder () {
         $this->returnType = 'Object';
@@ -200,12 +176,12 @@ class CoreORM {
      * Helper function to create a virtual table class
      *
      * @param string tableName Table name
-     * @return dbObject
+     * @return CoreORM
      */
     public static function table ($tableName) {
         $tableName = preg_replace ("/[^-a-z0-9_]+/i",'', $tableName);
         if (!class_exists ($tableName))
-            eval ("class $tableName extends dbObject {}");
+            eval ("class $tableName extends CoreORM {}");
         return new $tableName ();
     }
     /**
@@ -271,9 +247,9 @@ class CoreORM {
      * @param $id Primary Key
      * @param array|string $fields Array or coma separated list of fields to fetch
      *
-     * @return dbObject|array
+     * @return CoreORM|array
      */
-    protected function byId ($id, $fields = null) {
+    public function byId ($id, $fields = null) {
         $this->db->where (CoreDb::$prefix . $this->dbTable . '.' . $this->primaryKey, $id);
         return $this->getOne ($fields);
     }
@@ -283,9 +259,9 @@ class CoreORM {
      * @access public
      * @param array|string $fields Array or coma separated list of fields to fetch
      *
-     * @return dbObject
+     * @return CoreORM
      */
-    protected function getOne ($fields = null) {
+    public function getOne ($fields = null) {
         $this->processHasOneWith ();
         $results = $this->db->ArrayBuilder()->getOne ($this->dbTable, $fields);
         if ($this->db->count == 0)
@@ -309,9 +285,9 @@ class CoreORM {
      *                             or only $count
      * @param array|string $fields Array or coma separated list of fields to fetch
      *
-     * @return array Array of dbObjects
+     * @return array Array of CoreORMs
      */
-    protected function get ($limit = null, $fields = null) {
+    public function get ($limit = null, $fields = null) {
         $objects = Array ();
         $this->processHasOneWith ();
         $results = $this->db->ArrayBuilder()->get ($this->dbTable, $limit, $fields);
@@ -340,10 +316,10 @@ class CoreORM {
      * @access public
      * @param string $objectName Object Name
      *
-     * @return dbObject
+     * @return CoreORM
      */
-    private function with ($objectName) {
-        if (!property_exists ($this, 'relations') && !isset ($this->relations[$name]))
+    protected function with ($objectName) {
+        if (!property_exists ($this, 'relations') && !isset ($this->relations[$objectName]))
             die ("No relation with name $objectName found");
         $this->_with[$objectName] = $this->relations[$objectName];
         return $this;
@@ -356,7 +332,7 @@ class CoreORM {
      * @param string $key Key for a join from primary object
      * @param string $joinType SQL join type: LEFT, RIGHT,  INNER, OUTER
      *
-     * @return dbObject
+     * @return CoreORM
      */
     private function join ($objectName, $key = null, $joinType = 'LEFT') {
         $joinObj = new $objectName;
@@ -372,7 +348,7 @@ class CoreORM {
      *
      * @return int
      */
-    protected function count () {
+    public function count () {
         $res = $this->db->ArrayBuilder()->getValue ($this->dbTable, "count(*)");
         if (!$res)
             return 0;
@@ -411,7 +387,7 @@ class CoreORM {
     /**
      * Catches calls to undefined static methods.
      *
-     * Transparently creating dbObject class to provide smooth API like name::get() name::orderBy()->get()
+     * Transparently creating CoreORM class to provide smooth API like name::get() name::orderBy()->get()
      *
      * @param string $method
      * @param mixed $arg
@@ -434,7 +410,7 @@ class CoreORM {
         $data = $this->data;
         $this->processAllWith ($data);
         foreach ($data as &$d) {
-            if ($d instanceof dbObject)
+            if ($d instanceof CoreORM)
                 $d = $d->data;
         }
         return $data;
@@ -584,7 +560,7 @@ class CoreORM {
         if (!$this->dbFields)
             return $this->data;
         foreach ($this->data as $key => &$value) {
-            if ($value instanceof dbObject && $value->isNew == true) {
+            if ($value instanceof CoreORM && $value->isNew == true) {
                 $id = $value->save();
                 if ($id)
                     $value = $id;
@@ -606,7 +582,7 @@ class CoreORM {
         }
         return $sqlData;
     }
-    private static function dbObjectAutoload ($classname) {
+    private static function CoreORMAutoload ($classname) {
         $filename = static::$modelPath . $classname .".php";
         if (file_exists ($filename))
             include ($filename);
@@ -614,7 +590,7 @@ class CoreORM {
     /*
      * Enable models autoload from a specified path
      *
-     * Calling autoload() without path will set path to dbObjectPath/models/ directory
+     * Calling autoload() without path will set path to CoreORMPath/models/ directory
      *
      * @param string $path
      */
@@ -623,7 +599,7 @@ class CoreORM {
             static::$modelPath = $path . "/";
         else
             static::$modelPath = __DIR__ . "/models/";
-        spl_autoload_register ("dbObject::dbObjectAutoload");
+        spl_autoload_register ("CoreORM::CoreORMAutoload");
     }
 
     public static function getDbInstance()

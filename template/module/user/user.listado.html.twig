@@ -21,8 +21,12 @@
                         <td width="10%">{{ config.estado_user[user.estado] }}</td>
                         <td align="center">
                             <div class="btn-group" role="group">
+                                {% if tipo == 'normal' %}
                                 <button type="button" class="btn btn-default" onclick="user.launchEdit({{ user.id }})"><i class="fa fa-edit"></i> {% trans %}Editar{% endtrans %}</button>
                                 <button type="button" class="btn btn-default" onclick="user.eliminar({{ user.id }})"><i class="fa fa-remove"></i> {% trans %}Eliminar{% endtrans %}</button>
+                                {% else %}
+                                    <button type="button" class="btn btn-default selected-option" data-object="{{ user|json_encode() }}">{% trans %}Seleccionar{% endtrans %}</button>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>

@@ -1,0 +1,42 @@
+<style>
+    table {
+        color: #003300;
+        font-family: helvetica;
+        font-size: 8pt;
+    }
+    th {
+        background-color: #cecece;
+    }
+    td.field {
+        background-color: #ffffee;
+    }
+    td.value {
+        background-color: #F8F8F8;
+    }
+</style>
+{% include 'header.pdf.twig' %}
+{%  set config = get_config() %}
+{% if pagination.getRecords|length > 0 %}
+    <table cellpadding="4" cellspacing="2">
+        <tr>
+            <th class="value" width="35%">{% trans %}Nombres{% endtrans %}</th>
+            <th class="value" width="35%">{% trans %}Apellidos{% endtrans %}</th>
+            <th class="value" width="10%">{% trans %}Teléfono{% endtrans %}</th>
+            <th class="value" width="10%">{% trans %}Zona{% endtrans %}</th>
+            <th class="value" width="10%">{% trans %}Estado{% endtrans %}</th>
+        </tr>
+        {% for record in pagination.getRecords %}
+            <tr>
+                <td width="35%">{{ record.nombres }}</td>
+                <td width="35%">{{ record.apellidos }}</td>
+                <td width="10%">{{ record.telefono }}</td>
+                <td width="10%">{{ record.zona_nombre }}</td>
+                <td width="10%">{{ config.estado_user[record.estado] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <div>
+        {% trans %}<strong>Advertencia!</strong> No hay registros disponibles.{% endtrans %}
+    </div>
+{% endif %}

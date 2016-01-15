@@ -2,4 +2,78 @@
 
 {% block head %}{% endblock %}
 
-{% block content %}Hola{% endblock %}
+{% block content %}
+    {%  set config = get_config() %}
+    <div class="row">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <!-- Apply any bg-* class to to the icon to color it -->
+                <span class="info-box-icon bg-blue"><i class="fa fa-user"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Clientes</span>
+                    <span class="info-box-number">{{ clientes }}</span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <!-- Apply any bg-* class to to the icon to color it -->
+                <span class="info-box-icon bg-red"><i class="fa fa-google-wallet"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Prestamos</span>
+                    <span class="info-box-number">{{ prestamos }}</span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <!-- Apply any bg-* class to to the icon to color it -->
+                <span class="info-box-icon bg-green"><i class="fa fa-list"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Cobros</span>
+                    <span class="info-box-number">{{ cobros }}</span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Balance del dia</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    {% if balance_dia|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                <tr>
+                                    <th>Prestamo</th>
+                                    <th>Cuota</th>
+                                    <th>monto</th>
+                                    <th>Estado</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for prestamo in balance_dia %}
+                                    <tr>
+                                        <td>{{ prestamo.id }}</td>
+                                        <td>{{ prestamo.cuota }}</td>
+                                        <td>{{ prestamo.monto_cuota|currency }}</td>
+                                        <td>{{ config.estado_cuota[prestamo.estado_cuota] }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        {% trans %}<strong>Advertencia!</strong> No hay balance del dia.{% endtrans %}
+                    {% endif %}
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+{% endblock %}

@@ -40,5 +40,37 @@ mensajes = {
             $(this).data('bs.modal', null);
         });
         return modal;
+    },
+    search: function (title, options, callback) {
+        $('#modalSearch .modal-title').html(title);
+        $('#containerLoadingSearch').html(options.loading);
+        $('#containerListadoSearch').attr("data-callback", options.callback);
+        $("#inputCampos option").remove();
+        if(options.fields.length > 0) {
+            for (var i = 0; i < options.fields.length; i++) {
+                $("#inputCampos").append("<option value='" + options.fields[i].value + "'>" + options.fields[i].text + "</option>");
+            }
+        } else {
+            $("#containerFormSearch").hide();
+        }
+        $("#containerFormSearch .field").remove();
+        if(options.hidden != undefined && options.hidden.length > 0) {
+            for (var i = 0; i < options.hidden.length; i++) {
+                $("#containerFormSearch").append("<input type='hidden' id='"+options.hidden[i].id+"' value='"+options.hidden[i].value+"' class='field' />");
+            }
+        }
+        var modal = $('#modalSearch').modal({
+            show: true
+        });
+        $('#modalSearch').on('shown.bs.modal', function (e) {
+            $("#inputCampos").select2();
+            callback();
+        });
+        $("#modalSearch").on('hidden.bs.modal', function () {
+            $('#modalSearch').off('shown.bs.modal');
+            $('#modalSearch').off('hidden.bs.modal');
+            $(this).data('bs.modal', null);
+        });
+        return modal;
     }
 };

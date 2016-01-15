@@ -1,0 +1,86 @@
+{%  set config = get_config() %}
+<div class="panel panel-info">
+    <div class="panel-heading" style="cursor:pointer;" id="clienteSearchToogle">{% trans %}Cuadro de búsqueda{% endtrans %}<i class="fa fa-search pull-right">&nbsp;</i></div>
+    <div class="panel-body" style="display: none">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="inputNombresSearch" class="col-sm-2 control-label">{% trans %}Nombres{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputNombresSearch" name="inputNombresSearch" placeholder="{% trans %}Nombres{% endtrans %}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputApellidosSearch" class="col-sm-2 control-label">{% trans %}Apellidos{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputApellidosSearch" name="inputApellidosSearch" placeholder="{% trans %}Apellidos{% endtrans %}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputTelefonoSearch" class="col-sm-2 control-label">{% trans %}Teléfono{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputTelefonoSearch" name="inputTelefonoSearch" placeholder="{% trans %}Teléfono{% endtrans %}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputDireccionSearch" class="col-sm-2 control-label">{% trans %}Dirección{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputDireccionSearch" name="inputDireccionSearch" placeholder="{% trans %}Dirección{% endtrans %}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputBarrioSearch" class="col-sm-2 control-label">{% trans %}Barrio{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputBarrioSearch" name="inputBarrioSearch" placeholder="{% trans %}Barrio{% endtrans %}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputCiudadSearch" class="col-sm-2 control-label">{% trans %}Ciudad{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputCiudadSearch" name="inputCiudadSearch" placeholder="{% trans %}Ciudad{% endtrans %}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputObservacionesSearch" class="col-sm-2 control-label">{% trans %}Observaciones{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputObservacionesSearch" name="inputObservacionesSearch" placeholder="{% trans %}Observaciones{% endtrans %}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputZonaSearch" class="col-sm-2 control-label">{% trans %}Zona{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <select class="form-control select2" id="inputZonaSearch" name="inputZonaSearch" style="width: 100%" multiple>
+                        <option value=""></option>
+                        {% for zona in config.zonas %}
+                            <option value="{{ zona.id }}">{{ zona.zona }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEstadosearch" class="col-sm-2 control-label">{% trans %}Estado{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <select class="form-control select2" id="inputEstadosearch" name="inputEstadosearch" style="width: 100%" multiple>
+                        <option value=""></option>
+                        {% for key, estado in config.estado_user %}
+                            <option value="{{ key }}">{{ estado }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputRateSearch" class="col-sm-2 control-label">{% trans %}Calificación{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <select class="form-control select2" id="inputRateSearch" name="inputRateSearch" style="width: 100%" multiple>
+                        <option value=""></option>
+                        {% for key, calificacion in config.rate_cliente %}
+                            <option value="{{ key }}">{{ calificacion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-center" style="display: none">
+        <button type="button" class="btn btn-primary" onclick="cliente.listado()">{% trans %}Buscar{% endtrans %}</button>
+    </div>
+</div>

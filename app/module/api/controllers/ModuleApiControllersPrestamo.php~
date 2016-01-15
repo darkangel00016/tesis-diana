@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * Created by PhpStorm.
+ * User: lerny
+ * Date: 11/12/15
+ * Time: 12:33 PM
+ */
+class ModuleApiControllersPrestamo extends CoreControllers
+{
+
+    public function index () {
+        $searchCliente = (isset($_GET["cliente"]) && !empty($_GET["cliente"]))?$_GET["cliente"]:"";
+        $searchTipoIntervalo = (isset($_GET["tipo_intervalo"]) && !empty($_GET["tipo_intervalo"]))?$_GET["tipo_intervalo"]:array();
+        $searchEstado = (isset($_GET["estado"]) && !empty($_GET["estado"]))?$_GET["estado"]:array();
+        $searchZona = array();
+	$currentUser = CoreRoute::getUserLogged();
+	if( $currentUser->getTipo() == "usuario" ) {
+		if($currentUser->zonas != null) {
+			foreach($currentUser->zonas as $value) {
+				$searchZona[] = $value->getId();
+			}
+		} else {
+			echo json_encode(array(
+			    "msg" => _("No tiene zonas asignadas."),
+			    "records" => array(),
+			    "total" => $records["total"]
+			));
+			return;
+		}
+	}
+        $records = ModuleLoansHelpersPrestamo::listado(array(
+            "cliente" => $searchCliente,
+            "tipo_intervalo" => $searchTipoIntervalo,
+            "estado" => $searchEstado,
+	    "zonas" => $searchZona,
+            "pagina" => 0,
+            "paginas" => 0
+        ));
+
+        echo json_encode(array(
+            "msg" => _("Lista de Prestamos"),
+            "records" => $records["records"],
+            "total" => $records["total"]
+        ));
+    }
+
+    public function save () {
+        echo json_encode(ModuleLoansHelpersPrestamo::save());
+    }
+
+    public function delete () {
+        echo json_encode(ModuleLoansHelpersPrestamo::delete());
+    }
+}

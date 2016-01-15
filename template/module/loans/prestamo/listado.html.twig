@@ -1,0 +1,50 @@
+{%  set config = get_config() %}
+{% set urls = config.urls|json_decode %}
+{% if pagination.getRecords|length > 0 %}
+    <div class="box">
+        <div class="box-body">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans %}Cliente{% endtrans %}</th>
+                    <th>{% trans %}Monto{% endtrans %}</th>
+                    <th>{% trans %}Interes{% endtrans %}</th>
+                    <th>{% trans %}Saldo{% endtrans %}</th>
+                    <th class="text-center">{% trans %}Estado{% endtrans %}</th>
+                    <th class="text-center">{% trans %}Acciones{% endtrans %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for record in pagination.getRecords %}
+                    <tr>
+                        <td width="25%">{{ record.nombres ~ ", " ~ record.apellidos }}</td>
+                        <td width="10%">{{ record.monto|currency }}</td>
+                        <td width="10%">{{ record.interes|interes }}</td>
+                        <td width="10%">{{ record.saldo|currency }}</td>
+                        <td width="10%">{{ config.estado_prestamo[record.estado] }}</td>
+                        <td align="center">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default" onclick="prestamo.launchPay({{ record.id }})" title="{% trans %}Pagar{% endtrans %}"><i class="fa fa-credit-card"></i></button>
+                                <button type="button" class="btn btn-default" onclick="prestamo.launchEdit({{ record.id }})" title="{% trans %}Editar{% endtrans %}"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-default" onclick="prestamo.eliminar({{ record.id }})" title="{% trans %}Eliminar{% endtrans %}"><i class="fa fa-remove"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr></tr>
+                </tbody>
+            </table>
+            <p>&nbsp;</p>
+            <a href="{{ get_url(urls.prestamo) ~ "&a=exports&" ~ query_string }}"  class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> Exportar pdf</a>
+        </div>
+        {% if pagination.getRecords|length > 0 and pagination.getPaginas > 1 %}
+        <div class="box-footer">
+            {% include 'pagination.html.twig' with {'id': 'paginationPrestamo'} %}
+        </div>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        {% trans %}<strong>Advertencia!</strong> No hay registros disponibles.{% endtrans %}
+    </div>
+{% endif %}

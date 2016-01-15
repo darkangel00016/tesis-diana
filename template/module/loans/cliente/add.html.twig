@@ -1,0 +1,98 @@
+{% extends "base.html.twig" %}
+
+{% block head %}
+    <link rel="stylesheet" href="lib/AdminLTE-2.3.0/plugins/select2/select2.min.css" />
+    <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/select2/select2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="js/cliente.js"></script>
+{% endblock %}
+
+{% block footer %}
+    <script type="text/javascript">
+        //Initialize Select2 Elements
+        $(".select2").select2();
+        cliente.init();
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% set config = get_config() %}
+    {% set urls = config.urls|json_decode %}
+    <div class="box">
+        <div class="box-body">
+            <div id="containerLoading"></div>
+            <form class="form-horizontal" id="formCliente">
+                <input type="hidden" id="inputId" name="inputId" {% if record %} value="{{ record.getId }}" {% endif %}>
+                <div class="form-group">
+                    <label for="inputNombres" class="col-sm-2 control-label">{% trans %}Nombres{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputNombres" name="inputNombres" placeholder="{% trans %}Nombres{% endtrans %}" {% if record %} value="{{ record.getNombres }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputApellidos" class="col-sm-2 control-label">{% trans %}Apellidos{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputApellidos" name="inputApellidos" placeholder="{% trans %}Apellidos{% endtrans %}" {% if record %} value="{{ record.getApellidos }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputTelefono" class="col-sm-2 control-label">{% trans %}Teléfono{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputTelefono" name="inputTelefono" placeholder="{% trans %}Teléfono{% endtrans %}" {% if record %} value="{{ record.getTelefono }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputDireccion" class="col-sm-2 control-label">{% trans %}Dirección{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputDireccion" name="inputDireccion" placeholder="{% trans %}Dirección{% endtrans %}" {% if record %} value="{{ record.getDireccion }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputBarrio" class="col-sm-2 control-label">{% trans %}Barrio{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputBarrio" name="inputBarrio" placeholder="{% trans %}Barrio{% endtrans %}" {% if record %} value="{{ record.getBarrio }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputCiudad" class="col-sm-2 control-label">{% trans %}Ciudad{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputCiudad" name="inputCiudad" placeholder="{% trans %}Ciudad{% endtrans %}" {% if record %} value="{{ record.getCiudad }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputObservaciones" class="col-sm-2 control-label">{% trans %}Observaciones{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputObservaciones" name="inputObservaciones" placeholder="{% trans %}Observaciones{% endtrans %}" {% if record %} value="{{ record.getObservaciones }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputZona" class="col-sm-2 control-label">{% trans %}Zona{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" id="inputZona" name="inputZona" style="width: 100%">
+                            {% for zona in config.zonas %}
+                                <option value="{{ zona.id }}" {% if record and record.getZona.id == zona.id %} selected {% endif %}>{{ zona.zona }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputTipo" class="col-sm-2 control-label">{% trans %}Estado{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" id="inputEstado" name="inputEstado" style="width: 100%">
+                            {% for key, estado in config.estado_user %}
+                                <option value="{{ key }}" {% if record and record.getEstado == key %} selected {% endif %}>{{ estado }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-danger" id="buttonClienteCancel">{% trans %}Cancelar{% endtrans %}</button>
+                        <button type="button" class="btn btn-primary" id="buttonCliente">{% trans %}Guardar{% endtrans %}</button>
+                        {% if record %}<a href="{{ get_url(urls.cliente) ~ "&a=export&id=" ~ record.getId }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> Exportar pdf</a>{% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

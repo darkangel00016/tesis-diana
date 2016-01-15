@@ -1,0 +1,193 @@
+{% extends "base.html.twig" %}
+
+{% block head %}
+    <link rel="stylesheet" href="lib/AdminLTE-2.3.0/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="lib/AdminLTE-2.3.0/plugins/datepicker/datepicker3.css" />
+    <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/select2/select2.min.js"></script>
+    <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/datepicker/locales/bootstrap-datepicker.es.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/date-handle/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="js/prestamo.js"></script>
+    <script type="text/javascript" src="js/cliente.js"></script>
+{% endblock %}
+
+{% block footer %}
+    <script type="text/javascript">
+        //Initialize Select2 Elements
+        $(".select2").select2();
+        $('.datepicker').datepicker({
+            "format": "yyyy/mm/dd",
+            "language": "es"
+        });
+        prestamo.init();
+    </script>
+{% endblock %}
+
+{% block content %}
+    {%  set config = get_config() %}
+    {% set urls = config.urls|json_decode %}
+    {%  set no_change = false %}
+    {% if record %}
+        {%  set no_change = true %}
+    {% endif %}
+    {% if record %}
+        <div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#form" aria-controls="form" role="tab" data-toggle="tab">Formulario</a></li>
+                <li role="presentation"><a href="#cuotas" aria-controls="cuotas" role="tab" data-toggle="tab">Cuotas</a></li>
+            </ul>
+            <div class="tab-content">
+    {% endif %}
+    <div class="box tab-pane active" id="form">
+        <div class="box-body">
+            <div id="containerLoading"></div>
+            <form class="form-horizontal" id="formPrestamo">
+                <input type="hidden" id="inputId" name="inputId" {% if record %} value="{{ record.getId }}" {% endif %}>
+                <div class="form-group">
+                    <label for="inputCliente" class="col-sm-2 control-label">{% trans %}Cliente{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <input type="hidden" id="inputCliente" name="inputCliente"  {% if record %} value="{{ record.cliente.id }}" {% endif %} />
+                            <input type="text" class="form-control" id="inputClienteNombres" name="inputClienteNombres" placeholder="{% trans %}Cliente{% endtrans %}" {% if record %} value="{{ record.cliente.nombres ~ ", " ~ record.cliente.apellidos }}" {% endif %} readonly />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" id="buttonSearchCliente" {% if no_change %}disabled{% endif %}><i class="glyphicon glyphicon-search"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputMonto" class="col-sm-2 control-label">{% trans %}Monto{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            {% if config.simbolo_posicion == "i" %}
+                                <span class="input-group-addon">{{ config.simbolo_moneda }}</span>
+                            {% endif %}
+                            <input type="text" class="form-control" id="inputMonto" name="inputMonto" placeholder="{% trans %}Monto{% endtrans %}" {% if record %} value="{{ record.getMonto }}" {% endif %}  {% if no_change %}disabled{% endif %} />
+                            {% if config.simbolo_posicion == "d" %}
+                                <span class="input-group-addon">{{ config.simbolo_moneda }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputInteres" class="col-sm-2 control-label">{% trans %}Interes{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" id="inputInteres" name="inputInteres" style="width: 100%"  {% if no_change %}disabled{% endif %}>
+                        {% for porcentaje in config.porcentajes %}
+                            <option value="{{ porcentaje.id }}" {% if record and record.getInteres == porcentaje.porcentaje %} selected {% endif %}>{{ porcentaje.porcentaje }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputTipoIntervalo" class="col-sm-2 control-label">{% trans %}Intervalo de Cobro{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" id="inputTipoIntervalo" name="inputTipoIntervalo" style="width: 100%"  {% if no_change %}disabled{% endif %}>
+                            {% for key, tipo in config.tipo_intervalo %}
+                                <option value="{{ key }}" {% if record and record.getTipoIntervalo == key %} selected {% endif %}>{{ tipo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputIntervalo" class="col-sm-2 control-label">{% trans %}Duración{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputIntervalo" name="inputIntervalo" placeholder="{% trans %}Duración{% endtrans %}" {% if record %} value="{{ record.getIntervalo }}" {% endif %}  {% if no_change %}disabled{% endif %} />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputFechaInicio" class="col-sm-2 control-label">{% trans %}Fecha de Inicio{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control datepicker" id="inputFechaInicio" name="inputFechaInicio" placeholder="{% trans %}Fecha de Inicio{% endtrans %}" {% if record %} value="{{ record.getFechaInicio }}" {% endif %} readonly  {% if no_change %}disabled{% endif %} />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputFechaFin" class="col-sm-2 control-label">{% trans %}Fecha Fin{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputFechaFin" name="inputFechaFin" placeholder="{% trans %}Fecha Fin{% endtrans %}" {% if record %} value="{{ record.getFechaFin }}" {% endif %} disabled />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputMontoInteres" class="col-sm-2 control-label">{% trans %}Monto Interes{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            {% if config.simbolo_posicion == "i" %}
+                                <span class="input-group-addon">{{ config.simbolo_moneda }}</span>
+                            {% endif %}
+                            <input type="text" class="form-control" id="inputMontoInteres" name="inputMontoInteres" placeholder="{% trans %}Monto Interes{% endtrans %}" {% if record %} value="{{ record.getMontoInteres }}" {% endif %} disabled />
+                            {% if config.simbolo_posicion == "d" %}
+                                <span class="input-group-addon">{{ config.simbolo_moneda }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputSaldo" class="col-sm-2 control-label">{% trans %}Saldo{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            {% if config.simbolo_posicion == "i" %}
+                                <span class="input-group-addon">{{ config.simbolo_moneda }}</span>
+                            {% endif %}
+                            <input type="text" class="form-control" id="inputSaldo" name="inputSaldo" placeholder="{% trans %}Saldo{% endtrans %}" {% if record %} value="{{ record.getSaldo }}" {% endif %} disabled />
+                            {% if config.simbolo_posicion == "d" %}
+                                <span class="input-group-addon">{{ config.simbolo_moneda }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputObservaciones" class="col-sm-2 control-label">{% trans %}Observaciones{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputObservaciones" name="inputObservaciones" placeholder="{% trans %}Observaciones{% endtrans %}" {% if record %} value="{{ record.getObservaciones }}" {% endif %}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEstado" class="col-sm-2 control-label">{% trans %}Estado{% endtrans %}</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" id="inputEstado" name="inputEstado" style="width: 100%">
+                            {% for key, estado in config.estado_prestamo %}
+                                <option value="{{ key }}" {% if record and record.getEstado == key %} selected {% endif %}>{{ estado }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-danger" id="buttonPrestamoCancel">{% trans %}Cancelar{% endtrans %}</button>
+                        <button type="button" class="btn btn-primary" id="buttonPrestamo">{% trans %}Guardar{% endtrans %}</button>
+                        {% if record %}<a href="{{ get_url(urls.prestamo) ~ "&a=export&id=" ~ record.getId }}" class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> Exportar pdf</a>{% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if record %}
+                <div class="box tab-pane" id="cuotas">
+                    <div class="box-body">
+                        <div>
+                            <table class="table table-responsive">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Monto</th>
+                                    <th>Interes</th>
+                                    <th>Estado</th>
+                                </tr>
+                                {% for item in record.cuotas %}
+                                    <tr>
+                                        <td>{{ item.id }}</td>
+                                        <td>{{ item.fecha|date(config.formato_fecha_corta) }}</td>
+                                        <td>{{ item.monto|currency }}</td>
+                                        <td>{{ item.interes|currency }}</td>
+                                        <td>{{ config.estado_cuota[item.estado] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %}
+
+{% block head %}
+    <link rel="stylesheet" href="lib/AdminLTE-2.3.0/plugins/select2/select2.min.css" />
+    <script type="text/javascript" src="lib/AdminLTE-2.3.0/plugins/select2/select2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="js/porcentaje.js"></script>
+{% endblock %}
+
+{% block footer %}
+    <script type="text/javascript">
+        //Initialize Select2 Elements
+        $(".select2").select2();
+        porcentaje.init();
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% include '@ModuleConfiguracionPorcentaje/search.html.twig' %}
+    <div class="box-header">
+        <a href="{{ get_url(url ~ '&a=Add') }}" class="btn btn-sm btn-info btn-flat pull-left">Nuevo porcentaje</a>
+    </div>
+    <div id="containerLoading"></div>
+    <div id="containerListadoPorcentaje">
+        {% include '@ModuleConfiguracionPorcentaje/listado.html.twig' with { 'tipo': 'normal' } %}
+    </div>
+{% endblock %}

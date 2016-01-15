@@ -2,6 +2,7 @@
  * Created by lerny on 25/11/15.
  */
 user = {
+    url: "index.php?m=User",
     init: function () {
         $('#formUser').validate({
             rules: {
@@ -85,6 +86,10 @@ user = {
     },
     sentUser: function () {
         loading.load("#containerLoading");
+        var zonas = [];
+        $('#inputZona :selected').each(function(i, selected){
+            zonas[i] = $(selected).val();
+        });
         $.ajax({
             url: "index.php?m=User&a=save",
             data: {
@@ -93,7 +98,8 @@ user = {
                 nombre: $("#inputNombre").val(),
                 password: $("#inputPassword").val(),
                 tipo: $("#inputTipo").val(),
-                estado: $("#inputEstado").val()
+                estado: $("#inputEstado").val(),
+                zonas: zonas
             },
             type: "post",
             success: function (response) {
@@ -160,6 +166,19 @@ user = {
             }
         });
     },
+    listadoSearch: function (url) {
+        loading.load("#containerLoadingSearch");
+        $.ajax({
+            url: (url == undefined)?user.url + "&a=listadoSearch":url,
+            data: {},
+            type: "get",
+            success: function (response) {
+                $("#containerListadoSearch").html(response);
+                loading.unload("#containerLoadingSearch");
+                user.eventsListado();
+            }
+        });
+    },
     launchEdit: function (id) {
         if(id != undefined && id != "") {
             window.location = "index.php?m=User&a=edit&id=" + id;
@@ -171,6 +190,11 @@ user = {
         window.history.back(-1);
     },
     eventsListado: function () {
+        $("#containerListadoSearch .selected-option").each(function() {
+            $(this).on("click", function () {
+                eval("("+$("#containerListadoSearch").attr("data-callback")+"("+$(this).attr("data-object")+"))");
+            });
+        });
         $("#paginatioUsers").find("a").each(function () {
             $(this).on("click", function () {
                 user.listado($(this).attr("href"));

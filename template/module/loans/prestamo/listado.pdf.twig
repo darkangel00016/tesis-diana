@@ -1,0 +1,42 @@
+<style>
+    table {
+        color: #003300;
+        font-family: helvetica;
+        font-size: 8pt;
+    }
+    th {
+        background-color: #cecece;
+    }
+    td.field {
+        background-color: #ffffee;
+    }
+    td.value {
+        background-color: #F8F8F8;
+    }
+</style>
+{% include 'header.pdf.twig' %}
+{%  set config = get_config() %}
+{% if pagination.getRecords|length > 0 %}
+    <table cellpadding="4" cellspacing="2">
+        <tr>
+            <th width="60%">{% trans %}Cliente{% endtrans %}</th>
+            <th width="10%">{% trans %}Monto{% endtrans %}</th>
+            <th width="10%">{% trans %}Interes{% endtrans %}</th>
+            <th width="10%">{% trans %}Saldo{% endtrans %}</th>
+            <th width="10%">{% trans %}Estado{% endtrans %}</th>
+        </tr>
+        {% for record in pagination.getRecords %}
+            <tr>
+                <td width="60%">{{ record.nombres ~ ", " ~ record.apellidos }}</td>
+                <td width="10%">{{ record.monto|currency }}</td>
+                <td width="10%">{{ record.interes|interes }}</td>
+                <td width="10%">{{ record.saldo|currency }}</td>
+                <td width="10%">{{ config.estado_prestamo[record.estado] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <div>
+        {% trans %}<strong>Advertencia!</strong> No hay registros disponibles.{% endtrans %}
+    </div>
+{% endif %}

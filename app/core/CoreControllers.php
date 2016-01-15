@@ -11,7 +11,7 @@ class CoreControllers {
     protected $twig;
     protected $user;
 
-    function __construct($twig)
+    function __construct(Twig_Environment $twig)
     {
         $this->twig = $twig;
     }
@@ -30,6 +30,10 @@ class CoreControllers {
 
     public function menu() {
         return $this->twig->render('menu.html.twig', array('user' => $this->getUser()));
+    }
+
+    public function isAjax() {
+        return isset($_GET["is_ajax"]) && !empty($_GET["is_ajax"]);
     }
 
 }

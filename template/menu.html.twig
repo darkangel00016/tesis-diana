@@ -5,15 +5,77 @@
         <span>{% trans %}Inicio{% endtrans %}</span>
     </a>
 </li>
-<li class="treeview">
-    {% if user.getTipo == "admin" %}
-        <a href="{{ get_url('index.php?m=User') }}">
+{% if user.getTipo == "admin" %}
+    <li class="treeview">
+        <a href="{{ get_url('index.php?m=Configuracion') }}">
             <i class="fa fa-files-o"></i>
-                <span>{% trans %}Usuarios{% endtrans %}</span>
+            <span>{% trans %}Configuración{% endtrans %}</span>
+            <ul class="treeview-menu">
+                <li>
+                    <a href="{{ get_url('index.php?m=Configuracion') }}">
+                        <i class="fa fa-files-o"></i>
+                        <span>{% trans %}General{% endtrans %}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ get_url('index.php?m=Configuracion&c=Porcentaje') }}">
+                        <i class="fa fa-files-o"></i>
+                        <span>{% trans %}Porcentaje{% endtrans %}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ get_url('index.php?m=Configuracion&c=Zona') }}">
+                        <i class="fa fa-files-o"></i>
+                        <span>{% trans %}Zona{% endtrans %}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ get_url('index.php?m=Configuracion&c=Metodo') }}">
+                        <i class="fa fa-files-o"></i>
+                        <span>{% trans %}Metodo{% endtrans %}</span>
+                    </a>
+                </li>
+            </ul>
         </a>
-        <ul class="treeview-menu">
-            <li><a href="{{ get_url('index.php?m=User') }}"><i class="fa fa-circle-o"></i> {% trans %}Listado{% endtrans %}</a></li>
-            <li><a href="{{ get_url('index.php?m=User&a=Add') }}"><i class="fa fa-circle-o"></i> {% trans %}Agregar nuevo{% endtrans %}</a></li>
-        </ul>
-    {% endif %}
+    </li>
+    <li class="treeview">
+            <a href="{{ get_url('index.php?m=User') }}">
+                <i class="fa fa-files-o"></i>
+                    <span>{% trans %}Usuarios{% endtrans %}</span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="{{ get_url('index.php?m=User') }}"><i class="fa fa-circle-o"></i> {% trans %}Listado{% endtrans %}</a></li>
+                <li><a href="{{ get_url('index.php?m=User&a=Add') }}"><i class="fa fa-circle-o"></i> {% trans %}Agregar nuevo{% endtrans %}</a></li>
+            </ul>
+    </li>
+{% endif %}
+<li class="treeview">
+    <a href="{{ get_url('index.php?m=Loans&c=Cliente') }}">
+        <i class="fa fa-files-o"></i>
+            <span>{% trans %}Clientes{% endtrans %}</span>
+    </a>
+    <ul class="treeview-menu">
+        <li><a href="{{ get_url('index.php?m=Loans&c=Cliente') }}"><i class="fa fa-circle-o"></i> {% trans %}Listado{% endtrans %}</a></li>
+        <li><a href="{{ get_url('index.php?m=Loans&c=Cliente&a=Add') }}"><i class="fa fa-circle-o"></i> {% trans %}Agregar nuevo{% endtrans %}</a></li>
+    </ul>
+</li>
+<li class="treeview">
+    <a href="{{ get_url('index.php?m=Loans&c=Prestamo') }}">
+        <i class="fa fa-files-o"></i>
+            <span>{% trans %}Prestamos{% endtrans %}</span>
+    </a>
+    <ul class="treeview-menu">
+        <li><a href="{{ get_url('index.php?m=Loans&c=Prestamo') }}"><i class="fa fa-circle-o"></i> {% trans %}Listado{% endtrans %}</a></li>
+        <li><a href="{{ get_url('index.php?m=Loans&c=Prestamo&a=Add') }}"><i class="fa fa-circle-o"></i> {% trans %}Agregar nuevo{% endtrans %}</a></li>
+    </ul>
+</li>
+<li class="treeview">
+    <a href="{{ get_url('index.php?m=Loans&c=Pago') }}">
+        <i class="fa fa-files-o"></i>
+            <span>{% trans %}Pagos{% endtrans %}</span>
+    </a>
+    <ul class="treeview-menu">
+        <li><a href="{{ get_url('index.php?m=Loans&c=Pago') }}"><i class="fa fa-circle-o"></i> {% trans %}Listado{% endtrans %}</a></li>
+        <li><a href="{{ get_url('index.php?m=Loans&c=Pago&a=Add') }}"><i class="fa fa-circle-o"></i> {% trans %}Agregar nuevo{% endtrans %}</a></li>
+    </ul>
 </li>

@@ -1,0 +1,28 @@
+{%  set config = get_config() %}
+<div class="panel panel-info">
+    <div class="panel-heading" style="cursor:pointer;" id="zonaSearchToogle">{% trans %}Cuadro de búsqueda{% endtrans %}<i class="fa fa-search pull-right">&nbsp;</i></div>
+    <div class="panel-body" style="display: none">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="inputZonaSearch" class="col-sm-2 control-label">{% trans %}Zona{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputZonaSearch" name="inputZonaSearch" placeholder="{% trans %}Zona{% endtrans %}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEstadosearch" class="col-sm-2 control-label">{% trans %}Estado{% endtrans %}</label>
+                <div class="col-sm-10">
+                    <select class="form-control select2" id="inputEstadosearch" name="inputEstadosearch" style="width: 100%" multiple>
+                        <option value=""></option>
+                        {% for key, estado in config.estado_user %}
+                            <option value="{{ key }}">{{ estado }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-center" style="display: none">
+        <button type="button" class="btn btn-primary" onclick="zona.listado()">{% trans %}Buscar{% endtrans %}</button>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+<style>
+    table {
+        color: #003300;
+        font-family: helvetica;
+        font-size: 8pt;
+    }
+    th {
+        background-color: #cecece;
+    }
+    td.field {
+        background-color: #ffffee;
+    }
+    td.value {
+        background-color: #F8F8F8;
+    }
+</style>
+{% include 'header.pdf.twig' %}
+{% set config = get_config() %}
+{% set metodo = "" %}
+{% for _metodo in config.metodos %}
+    {% if _metodo.id == record.getMetodo %}
+        {% set metodo = _metodo.metodo %}
+    {% endif %}
+{% endfor %}
+<table cellpadding="4" cellspacing="1" width="100%">
+    <tr>
+        <td width="20%" class="field"><b>ID</b></td>
+        <td width="80%" class="value">{{ record.id }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Cliente</b></td>
+        <td width="80%" class="value">{{ record.cliente.nombres ~ ", " ~ record.cliente.apellidos }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Monto</b></td>
+        <td width="80%" class="value">{{ record.monto|currency }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Metodo de pago</b></td>
+        <td width="80%" class="value">{{ metodo }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Fecha</b></td>
+        <td width="80%" class="value">{{ record.fecha|date(config.formato_fecha_corta) }}</td>
+    </tr>
+    <tr>
+        <td width="20%" class="field"><b>Estado</b></td>
+        <td width="80%" class="value">{{ config.estado_pago[record.estado] }}</td>
+    </tr>
+</table>
+<h3>Cuotas</h3>
+<table cellpadding="4" cellspacing="2">
+    <tr>
+        <th>Tipo</th>
+        <th>Documento</th>
+        <th>Fecha</th>
+        <th>Monto</th>
+    </tr>
+    {% for item in record.items %}
+        <tr>
+            <td class="value">{{ config.origen_pago[item.origen] }}</td>
+            <td class="value">{{ item.documento }}</td>
+            <td class="value">{{ item.document_origin.fecha|date(config.formato_fecha_corta) }}</td>
+            <td class="value">{{ item.monto|currency }}</td>
+        </tr>
+    {% endfor %}
+</table>

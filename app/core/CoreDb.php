@@ -53,7 +53,7 @@ class CoreDb
      * An array that holds where conditions
      * @var array
      */
-    protected $_where = array();
+    public $_where = array();
     /**
      * An array that holds having conditions
      * @var array
@@ -89,6 +89,11 @@ class CoreDb
      * @var string
      */
     protected $_stmtError;
+    /**
+     * Variable which holds last statement error
+     * @var string
+     */
+    protected $_stmtErrorNo;
     /**
      * Database credentials
      * @var string
@@ -253,7 +258,7 @@ class CoreDb
      *
      * @return CoreDb Returns the current instance.
      */
-    protected function reset()
+    public function reset()
     {
         if ($this->traceEnabled) {
             $this->trace[] = array($this->_lastQuery, (microtime(true) - $this->traceStartQ), $this->_traceGetCaller());
@@ -616,6 +621,7 @@ class CoreDb
         $stmt = $this->_buildQuery($numRows);
         $stmt->execute();
         $this->_stmtError = $stmt->error;
+        $this->_stmtErrorNo = $stmt->errno;
         $this->reset();
         return ($stmt->affected_rows > 0);
     }
@@ -907,6 +913,7 @@ class CoreDb
         $stmt = $this->_buildQuery(null, $insertData);
         $stmt->execute();
         $this->_stmtError = $stmt->error;
+        $this->_stmtErrorNo = $stmt->errno;
         $this->reset();
         $this->count = $stmt->affected_rows;
         if ($stmt->affected_rows < 1) {
@@ -938,7 +945,6 @@ class CoreDb
         $this->_buildOrderBy();
         $this->_buildLimit($numRows);
         $this->_buildOnDuplicate($tableData);
-
         if ($this->_forUpdate) {
             $this->_query .= ' FOR UPDATE';
         }
@@ -949,6 +955,7 @@ class CoreDb
         if ($this->isSubQuery) {
             return;
         }
+        //var_dump($this->_lastQuery);
         // Prepare query
         $stmt = $this->_prepareQuery();
         // Bind parameters to statement if any
@@ -1657,6 +1664,11 @@ class CoreDb
     public function errorno()
     {
         return $this->mysqli()->errno;
+    }
+
+    public function errornost()
+    {
+        return $this->_stmtErrorNo;
     }
 }
 // END class

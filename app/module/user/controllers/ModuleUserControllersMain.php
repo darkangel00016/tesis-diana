@@ -25,7 +25,16 @@ class ModuleUserControllersMain extends CoreControllers {
     public function listado () {
         echo $this->twig->render('@ModuleUser/user.listado.html.twig', array(
             "pagination" => $this->_listado(),
-            "pagina" => $this->getPagina()
+            "pagina" => $this->getPagina(),
+            "tipo"=> "normal"
+        ));
+    }
+
+    public function listadoSearch () {
+        echo $this->twig->render('@ModuleUser/user.listado.html.twig', array(
+            "pagination" => $this->_listado(),
+            "pagina" => $this->getPagina(),
+            "tipo"=> "search"
         ));
     }
 
@@ -36,7 +45,7 @@ class ModuleUserControllersMain extends CoreControllers {
         $searchNombre = (isset($_GET["nombre"]) && !empty($_GET["nombre"]))?$_GET["nombre"]:"";
         $searchEstado = (isset($_GET["estado"]) && !empty($_GET["estado"]))?$_GET["estado"]:array();
 
-        $usuario = new EntityUsuario;
+        $usuario = new ModuleUserEntityUsuario;
         $records = $usuario->findAll(array(
             array(
                 "field" => "usuario",
@@ -87,7 +96,7 @@ class ModuleUserControllersMain extends CoreControllers {
         $usr = $_GET["id"];
         $record = null;
         if(!empty($usr)) {
-            $record = new EntityUsuario($usr);
+            $record = new ModuleUserEntityUsuario($usr);
         }
         $u = CoreRoute::getUserLogged();
         echo $this->twig->render('@ModuleUser/user.add.html.twig', array(
@@ -102,59 +111,7 @@ class ModuleUserControllersMain extends CoreControllers {
     }
 
     public function save () {
-
-        $currentUser = CoreRoute::getUserLogged();
-
-        $id = (isset($_POST["id"]) && !empty($_POST["id"]))?$_POST["id"]:"";
-        if(empty($id)) {
-            $usuario = new EntityUsuario;
-        } else {
-            $usuario = new EntityUsuario($id);
-        }
-        $time = time();
-        $usuario->usuario = $_POST["email"];
-        $usuario->nombre = $_POST["nombre"];
-        if(empty($id)) {
-            $usuario->passusuario = md5($_POST["password"]);
-            $usuario->creado_por = $currentUser->getId();
-            $usuario->fecha_creacion = $time;
-        } else {
-            $usuario->modificado_por = $currentUser->getId();
-            $usuario->fecha_modificacion = $time;
-            $password = (isset($_POST["password"]) && !empty($_POST["password"]))?$_POST["password"]:"";
-            if(!empty($password) && $usuario->passusuario != md5($password)) {
-                $usuario->passusuario = md5($password);
-            }
-        }
-        if(CoreRoute::isAdmin()) {
-            $usuario->tipo = $_POST["tipo"];
-            $usuario->estado = $_POST["estado"];
-        }
-        $error = array(
-            "msg" => _("Ocurrio un error al guardar el usuario."),
-            "error" => true
-        );
-        if(!CoreRoute::isAdmin() && ($id != $currentUser->getId())){
-            $error["msg"] = _("No coincide el usuario logeado con el enviado.");
-        } else {
-            if ($usuario->getUsuario() == "" || ($usuario->getPassusuario() == "" && $usuario->isNew) || $usuario->getTipo() == "") {
-                $error["msg"] = _("Hay campos vacios.");
-            } else {
-                $rowChanges = $usuario->save();
-                $errorno = $usuario->getDbInstance()->errorno();
-                if ($rowChanges > 0) {
-                    $error["msg"] = _("Se ha guardado el usuario exitosamente.");
-                    $error["error"] = false;
-                } else if($errorno == 1062){
-                    $error["msg"] = _("Usuario duplicado.");
-                } else {
-                    $error["msg"] = _("No hubo cambios en el registro.");
-                }
-            }
-        }
-
-        echo json_encode($error);
-
+        echo json_encode(ModuleUserHelpersUsuario::save());
     }
 
     public function delete () {
@@ -167,7 +124,7 @@ class ModuleUserControllersMain extends CoreControllers {
         if(empty($id)) {
             $error["msg"] = _("Seleccione un registro valido.");
         } else {
-            $usuario = new EntityUsuario($id);
+            $usuario = new ModuleUserEntityUsuario($id);
             if($usuario->delete()) {
                 $error["msg"] = _("Se elimino el registro exitosamente.");
                 $error["error"] = false;

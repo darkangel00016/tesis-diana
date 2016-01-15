@@ -1,0 +1,56 @@
+{%  set config = get_config() %}
+{% set urls = config.urls|json_decode %}
+{% if pagination.getRecords|length > 0 %}
+    <div class="box">
+        <div class="box-body">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans %}Nombres{% endtrans %}</th>
+                    <th>{% trans %}Apellidos{% endtrans %}</th>
+                    <th>{% trans %}Teléfono{% endtrans %}</th>
+                    <th>{% trans %}Zona{% endtrans %}</th>
+                    <th class="text-center">{% trans %}Estado{% endtrans %}</th>
+                    <th class="text-center">{% trans %}Acciones{% endtrans %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for cliente in pagination.getRecords %}
+                    <tr>
+                        <td width="20%">{{ cliente.nombres }}</td>
+                        <td width="20%">{{ cliente.apellidos }}</td>
+                        <td width="10%">{{ cliente.telefono }}</td>
+                        <td width="10%">{{ cliente.zona_nombre }}</td>
+                        <td width="10%">{{ config.estado_user[cliente.estado] }}</td>
+
+                        <td align="center">
+                            <div class="btn-group" role="group">
+                                {% if tipo == "normal" %}
+                                    <button type="button" class="btn btn-default" onclick="cliente.launchEdit({{ cliente.id }})"><i class="fa fa-edit"></i> {% trans %}Editar{% endtrans %}</button>
+                                    <button type="button" class="btn btn-default" onclick="cliente.eliminar({{ cliente.id }})"><i class="fa fa-remove"></i> {% trans %}Eliminar{% endtrans %}</button>
+                                {% else %}
+                                    <button type="button" class="btn btn-default selected-option" data-object="{{ cliente|json_encode() }}">{% trans %}Seleccionar{% endtrans %}</button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr></tr>
+                </tbody>
+            </table>
+        {% if tipo == "normal" %}
+            <p>&nbsp;</p>
+            <a href="{{ get_url(urls.cliente) ~ "&a=exports&" ~ query_string }}"  class="btn btn-default" target="_blank"><i class="fa fa-file-pdf-o"></i> Exportar pdf</a>
+        {% endif %}
+        </div>
+        {% if pagination.getRecords|length > 0 and pagination.getPaginas > 1 %}
+        <div class="box-footer">
+            {% include 'pagination.html.twig' with {'id': 'paginationClientes'} %}
+        </div>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        {% trans %}<strong>Advertencia!</strong> No hay registros disponibles.{% endtrans %}
+    </div>
+{% endif %}
