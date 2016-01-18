@@ -30,7 +30,7 @@ class CoreRoute {
         "admin" => array(
             "user/main/(index|listado|listadoSearch|add|edit|delete|save)",
             "api/prestamo/report",
-            "api/pago/report"
+            "api/pago/(report|rechazar|aprobar|reversar)"
         )
     );
 
