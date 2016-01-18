@@ -25,12 +25,13 @@ class CoreRoute {
             "configuracion/(porcentaje|zona|metodo|main)/(index|listado|listadoSearch|add|edit|delete|save)",
             "api/(cliente|prestamo|pago)/(index|delete|save)",
             "api/user/save",
-            "api/cliente/download"
+            "api/cliente/download",
+            "api/pago/(rechazar|aprobar|reversar)"
         ),
         "admin" => array(
             "user/main/(index|listado|listadoSearch|add|edit|delete|save)",
             "api/prestamo/report",
-            "api/pago/(report|rechazar|aprobar|reversar)"
+            "api/pago/report"
         )
     );
 
