@@ -44,6 +44,7 @@ login = {
         $('#formLogin').submit();
     },
     sentLogin: function () {
+        loading.load("#containerLoading");
         $.ajax({
             url: "index.php?m=Login&c=Main&a=access",
             data: {
@@ -54,10 +55,11 @@ login = {
             type: "post",
             success: function (response) {
                 var r = eval("("+response+")");
+                loading.unload("#containerLoading");
                 if(!r.error) {
                     window.location.href = "index.php";
                 } else {
-                    alert(r.msg);
+                    mensajes.alert("Error", r.msg, 3);
                 }
 
             }

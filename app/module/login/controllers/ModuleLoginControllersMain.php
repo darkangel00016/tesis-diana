@@ -36,4 +36,25 @@ class ModuleLoginControllersMain extends CoreControllers {
         header("Location: index.php");
     }
 
+    public function forgot () {
+        echo $this->twig->render('@ModuleLogin/forgot.form.html.twig', array(
+            "title" => _("Generar nueva clave")
+        ));
+    }
+
+    public function code () {
+        echo $this->twig->render('@ModuleLogin/code.form.html.twig', array(
+            "title" => _("Validar nueva clave")
+        ));
+    }
+
+    public function generate () {
+        echo json_encode(ModuleLoginHelpersLogin::forgot($this->twig));
+    }
+
+
+    public function check_code () {
+        echo json_encode(ModuleLoginHelpersLogin::check());
+    }
+
 }

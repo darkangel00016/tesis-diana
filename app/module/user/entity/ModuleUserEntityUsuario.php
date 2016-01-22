@@ -18,7 +18,7 @@ class ModuleUserEntityUsuario extends CoreORM
         'modificado_por' => Array('int'),
         'fecha_modificacion' => Array('int'),
         'estado' => Array('int'),
-        'check_code' => Array('int')
+        'check_code' => Array('text')
     );
 
     /**

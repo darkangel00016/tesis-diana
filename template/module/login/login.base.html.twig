@@ -10,6 +10,8 @@
     <link href="lib/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="lib/vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/core/mensajes.js"></script>
+    <script type="text/javascript" src="js/core/loading.js"></script>
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -18,5 +20,7 @@
         {% block main   %}{% endblock %}
         {% block footer %}{% endblock %}
     </div>
+    {% include '@Modal/alert.html.twig' %}
+    {% include '@Modal/confirmation.html.twig' %}
 </body>
 </html>

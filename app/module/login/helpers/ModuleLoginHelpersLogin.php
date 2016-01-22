@@ -96,12 +96,21 @@ class ModuleLoginHelpersLogin
     {
         $usuario = new ModuleUserEntityUsuario;
         $email = isset($_POST["email"])?$_POST["email"]:"";
+        if(isset($_POST["code"])) {
+            $code = $_POST["code"];
+        }
         $error = array(
             "msg" => _("Debe enviar el email."),
-            "error" => true,
-            "perro" => $_POST["email"]
+            "error" => true
         );
-        if(!empty($email)) {
+        $in = true;
+        if(isset($code)) {
+            $in = @$_SESSION['catpcha'] == $code;
+            if(!$in) {
+                $error["msg"] = _("El código de validación no es valido {$_SESSION['catpcha']}.");
+            }
+        }
+        if(!empty($email) && $in) {
             if($usuario->findByField($email, "usuario")) {
                 $code = rand(10000000, 99999999);
                 $usuario->check_code = $code;
@@ -138,18 +147,28 @@ class ModuleLoginHelpersLogin
         $email = isset($_POST["email"])?$_POST["email"]:"";
         $code = isset($_POST["code"])?$_POST["code"]:"";
         $password = isset($_POST["password"])?$_POST["password"]:"";
+        if(isset($_POST["check_code"])) {
+            $check_code = $_POST["check_code"];
+        }
         $error = array(
             "msg" => _("Hay campos vacios."),
             "error" => true
         );
-        if(!empty($email) && !empty($code) && !empty($password)) {
+        $in = true;
+        if(isset($check_code)) {
+            $in = @$_SESSION['catpcha'] == $check_code;
+            if(!$in) {
+                $error["msg"] = _("El código de validación no es valido {$_SESSION['catpcha']}.");
+            }
+        }
+        if(!empty($email) && !empty($code) && !empty($password) && $in) {
             if($usuario->findByField($email, "usuario")) {
-                if($usuario->getCheckCode() == $code) {
+                if($usuario->check_code == $code) {
                     $usuario->passusuario = md5($password);
                     $error["msg"] = _("Clave cambiada exitosamente.");
                     $error["error"] = false;
                 } else {
-                    $error["msg"] = _("código de confirmación es invalido.");
+                    $error["msg"] = _("código de confirmación es invalido {$usuario->passusuario}.");
                 }
                 $usuario->check_code = "";
                 $usuario->save();

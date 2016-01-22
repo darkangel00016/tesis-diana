@@ -10,7 +10,7 @@ class CoreRoute {
 
     static public $access = array(
         "public" => array(
-            "login/main/(index|access|catpcha)"
+            "login/main/(index|access|catpcha|forgot|generate|check_code|code)"
         ),
         "logged" => array(
             "main/index",
