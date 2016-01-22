@@ -3,14 +3,14 @@
 /**
  * Class EntitySupervisor
  */
-class EntitySupervisor extends CoreORM
+class ModuleManagerMailEntitySupervisor extends CoreORM
 {
 
     public static $prefix = "";
-    protected $dbTable = "supervisor";
-    protected $primaryKey = "id";
+    public $dbTable = "supervisor";
+    public $primaryKey = "id";
 
-    protected $dbFields = Array(
+    public $dbFields = Array(
         'id' => Array('int'),
         'nombres' => Array('text', 'required'),
         'apellidos' => Array('text'),
@@ -24,22 +24,36 @@ class EntitySupervisor extends CoreORM
     );
 
     /**
-     * EntityUsuario constructor.
+     * ModuleManagerMailEntitySupervisor constructor.
      * @param string $primaryKey
      */
     public function __construct($primaryKey = "", $data = array())
     {
+        if(is_array($primaryKey)) {
+            $data =  $primaryKey;
+        }
         parent::__construct($data);
-        if(!empty($primaryKey)) {
+        if(!is_array($primaryKey) && !empty($primaryKey)) {
             $this->find($primaryKey);
         }
     }
 
     // setup method to get all active users
-    public function find($id, $campo = "id")
+    public function find($id)
+    {
+        $result = $this->byId($id);
+        $isExist = false;
+        if($result) {
+            $this->isNew = false;
+            $isExist = true;
+        }
+        return $isExist;
+    }
+
+    public function findByField($value, $field)
     {
         $db = CoreDb::getInstance();
-        $result = $db->query("SELECT * FROM ".$this->dbTable . " WHERE {$campo} = '".$id."'", 1);
+        $result = $db->query("SELECT * FROM ".$this->dbTable . " WHERE $field = '".$value."'", 1);
         $isExist = false;
         if($result) {
             foreach($this->dbFields as $key => $value) {

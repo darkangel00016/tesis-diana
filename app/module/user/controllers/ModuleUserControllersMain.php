@@ -36,7 +36,7 @@ class ModuleUserControllersMain extends CoreControllers {
         $searchNombre = (isset($_GET["nombre"]) && !empty($_GET["nombre"]))?$_GET["nombre"]:"";
         $searchEstado = (isset($_GET["estado"]) && !empty($_GET["estado"]))?$_GET["estado"]:array();
 
-        $usuario = new EntityUsuario;
+        $usuario = new ModuleUserEntityUsuario;
         $records = $usuario->findAll(array(
             array(
                 "field" => "usuario",
@@ -87,7 +87,7 @@ class ModuleUserControllersMain extends CoreControllers {
         $usr = $_GET["id"];
         $record = null;
         if(!empty($usr)) {
-            $record = new EntityUsuario($usr);
+            $record = new ModuleUserEntityUsuario($usr);
         }
         $u = CoreRoute::getUserLogged();
         echo $this->twig->render('@ModuleUser/user.add.html.twig', array(
@@ -107,9 +107,9 @@ class ModuleUserControllersMain extends CoreControllers {
 
         $id = (isset($_POST["id"]) && !empty($_POST["id"]))?$_POST["id"]:"";
         if(empty($id)) {
-            $usuario = new EntityUsuario;
+            $usuario = new ModuleUserEntityUsuario;
         } else {
-            $usuario = new EntityUsuario($id);
+            $usuario = new ModuleUserEntityUsuario($id);
         }
         $time = time();
         $usuario->usuario = $_POST["email"];
@@ -167,7 +167,7 @@ class ModuleUserControllersMain extends CoreControllers {
         if(empty($id)) {
             $error["msg"] = _("Seleccione un registro valido.");
         } else {
-            $usuario = new EntityUsuario($id);
+            $usuario = new ModuleUserEntityUsuario($id);
             if($usuario->delete()) {
                 $error["msg"] = _("Se elimino el registro exitosamente.");
                 $error["error"] = false;

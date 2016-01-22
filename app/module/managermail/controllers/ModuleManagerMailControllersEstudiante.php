@@ -11,7 +11,7 @@ class ModuleManagerMailControllersEstudiante extends CoreControllers
     public static $urlBase = "index.php?m=ManagerMail&c=Estudiante";
 
     public function index () {
-        echo $this->twig->render('@ModuleManagerMail/estudiante.html.twig', array(
+        echo $this->twig->render('@' . ModuleManagerMailConfig::getEstudiante() . '/estudiante.html.twig', array(
             "title" => _("Listado de estudiantes"),
             "menu" => $this->menu(),
             "pagination" => $this->_listado(),
@@ -49,7 +49,7 @@ class ModuleManagerMailControllersEstudiante extends CoreControllers
                             }
                         }
                         if(sizeof($lines) > 1) {
-                            $estudiante = new EntityEstudiante;
+                            $estudiante = new ModuleManagerMailEntityEstudiante;
                             $data = array();
                             foreach($lines as $key => $value) {
                                 $campos = preg_split("/;/", $value);
@@ -100,7 +100,7 @@ class ModuleManagerMailControllersEstudiante extends CoreControllers
             }
             echo json_encode($error);
         } else {
-            echo $this->twig->render('@ModuleManagerMail/estudiante.import.html.twig', array(
+            echo $this->twig->render('@' . ModuleManagerMailConfig::getEstudiante() . '/estudiante.import.html.twig', array(
                 "title" => _("Importar estudiantes"),
                 "menu" => $this->menu(),
                 "breadcrumb" => $this->breadcrumb(array(
@@ -113,7 +113,7 @@ class ModuleManagerMailControllersEstudiante extends CoreControllers
     }
 
     public function listado () {
-        echo $this->twig->render('@ModuleManagerMail/estudiante.listado.html.twig', array(
+        echo $this->twig->render('@' . ModuleManagerMailConfig::getEstudiante() . '/estudiante.listado.html.twig', array(
             "pagination" => $this->_listado(),
             "pagina" => $this->getPagina()
         ));
@@ -127,7 +127,7 @@ class ModuleManagerMailControllersEstudiante extends CoreControllers
         $searchCedula = (isset($_GET["cedula"]) && !empty($_GET["cedula"]))?$_GET["cedula"]:"";
         $searchEstado = (isset($_GET["estado"]) && !empty($_GET["estado"]))?$_GET["estado"]:array();
 
-        $estudiante = new EntityEstudiante;
+        $estudiante = new ModuleManagerMailEntityEstudiante;
         $records = $estudiante->findAll(array(
             array(
                 "field" => "nombres",
@@ -167,7 +167,7 @@ class ModuleManagerMailControllersEstudiante extends CoreControllers
 
     public function add ()
     {
-        echo $this->twig->render('@ModuleManagerMail/estudiante.add.html.twig', array(
+        echo $this->twig->render('@' . ModuleManagerMailConfig::getEstudiante() . '/estudiante.add.html.twig', array(
             "title" => _("Agregar estudiante"),
             "menu" => $this->menu(),
             "breadcrumb" => $this->breadcrumb(array(
@@ -183,9 +183,9 @@ class ModuleManagerMailControllersEstudiante extends CoreControllers
         $usr = $_GET["id"];
         $record = null;
         if(!empty($usr)) {
-            $record = new EntityEstudiante($usr);
+            $record = new ModuleManagerMailEntityEstudiante($usr);
         }
-        echo $this->twig->render('@ModuleManagerMail/estudiante.add.html.twig', array(
+        echo $this->twig->render('@' . ModuleManagerMailConfig::getEstudiante() . '/estudiante.add.html.twig', array(
             "title" => _("Editar estudiante"),
             "menu" => $this->menu(),
             "record" => $record,
@@ -202,9 +202,9 @@ class ModuleManagerMailControllersEstudiante extends CoreControllers
 
         $id = (isset($_POST["id"]) && !empty($_POST["id"]))?$_POST["id"]:"";
         if(empty($id)) {
-            $estudiante = new EntityEstudiante;
+            $estudiante = new ModuleManagerMailEntityEstudiante;
         } else {
-            $estudiante = new EntityEstudiante($id);
+            $estudiante = new ModuleManagerMailEntityEstudiante($id);
         }
         $time = time();
         $estudiante->nombres = $_POST["nombres"];
@@ -253,7 +253,7 @@ class ModuleManagerMailControllersEstudiante extends CoreControllers
         if(empty($id)) {
             $error["msg"] = _("Seleccione un registro valido.");
         } else {
-            $estudiante = new EntityEstudiante($id);
+            $estudiante = new ModuleManagerMailEntityEstudiante($id);
             if($estudiante->delete()) {
                 $error["msg"] = _("Se elimino el registro exitosamente.");
                 $error["error"] = false;

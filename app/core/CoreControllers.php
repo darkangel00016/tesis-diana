@@ -11,7 +11,7 @@ class CoreControllers {
     protected $twig;
     protected $user;
 
-    function __construct($twig)
+    function __construct(Twig_Environment $twig)
     {
         $this->twig = $twig;
     }

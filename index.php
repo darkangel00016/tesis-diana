@@ -44,6 +44,8 @@ $twig = new Twig_Environment($loader, array(
     'debug' => true
 ));
 
+CoreRoute::db();
+
 CoreRoute::validate();
 
 CoreRoute::ini($twig);

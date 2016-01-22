@@ -11,7 +11,7 @@ class ModuleManagerMailControllersSupervisor extends CoreControllers
     public static $urlBase = "index.php?m=ManagerMail&c=Supervisor";
 
     public function index () {
-        echo $this->twig->render('@ModuleManagerMail/supervisor.html.twig', array(
+        echo $this->twig->render('@' . ModuleManagerMailConfig::getSupervisor() . '/supervisor.html.twig', array(
             "title" => _("Listado de supervisores"),
             "menu" => $this->menu(),
             "pagination" => $this->_listado(),
@@ -49,7 +49,7 @@ class ModuleManagerMailControllersSupervisor extends CoreControllers
                             }
                         }
                         if(sizeof($lines) > 1) {
-                            $supervisor = new EntitySupervisor;
+                            $supervisor = new ModuleManagerMailEntitySupervisor;
                             $data = array();
                             foreach($lines as $key => $value) {
                                 $campos = preg_split("/;/", $value);
@@ -100,7 +100,7 @@ class ModuleManagerMailControllersSupervisor extends CoreControllers
             }
             echo json_encode($error);
         } else {
-            echo $this->twig->render('@ModuleManagerMail/supervisor.import.html.twig', array(
+            echo $this->twig->render('@' . ModuleManagerMailConfig::getSupervisor() . '/supervisor.import.html.twig', array(
                 "title" => _("Importar supervisores"),
                 "menu" => $this->menu(),
                 "breadcrumb" => $this->breadcrumb(array(
@@ -113,7 +113,7 @@ class ModuleManagerMailControllersSupervisor extends CoreControllers
     }
 
     public function listado () {
-        echo $this->twig->render('@ModuleManagerMail/supervisor.listado.html.twig', array(
+        echo $this->twig->render('@' . ModuleManagerMailConfig::getSupervisor() . '/supervisor.listado.html.twig', array(
             "pagination" => $this->_listado(),
             "pagina" => $this->getPagina()
         ));
@@ -127,7 +127,7 @@ class ModuleManagerMailControllersSupervisor extends CoreControllers
         $searchCedula = (isset($_GET["cedula"]) && !empty($_GET["cedula"]))?$_GET["cedula"]:"";
         $searchEstado = (isset($_GET["estado"]) && !empty($_GET["estado"]))?$_GET["estado"]:array();
 
-        $supervisor = new EntitySupervisor;
+        $supervisor = new ModuleManagerMailEntitySupervisor;
         $records = $supervisor->findAll(array(
             array(
                 "field" => "nombres",
@@ -167,7 +167,7 @@ class ModuleManagerMailControllersSupervisor extends CoreControllers
 
     public function add ()
     {
-        echo $this->twig->render('@ModuleManagerMail/supervisor.add.html.twig', array(
+        echo $this->twig->render('@' . ModuleManagerMailConfig::getSupervisor() . '/supervisor.add.html.twig', array(
             "title" => _("Agregar supervisor"),
             "menu" => $this->menu(),
             "breadcrumb" => $this->breadcrumb(array(
@@ -183,9 +183,9 @@ class ModuleManagerMailControllersSupervisor extends CoreControllers
         $usr = $_GET["id"];
         $record = null;
         if(!empty($usr)) {
-            $record = new EntitySupervisor($usr);
+            $record = new ModuleManagerMailEntitySupervisor($usr);
         }
-        echo $this->twig->render('@ModuleManagerMail/supervisor.add.html.twig', array(
+        echo $this->twig->render('@' . ModuleManagerMailConfig::getSupervisor() . '/supervisor.add.html.twig', array(
             "title" => _("Editar supervisor"),
             "menu" => $this->menu(),
             "record" => $record,
@@ -202,9 +202,9 @@ class ModuleManagerMailControllersSupervisor extends CoreControllers
 
         $id = (isset($_POST["id"]) && !empty($_POST["id"]))?$_POST["id"]:"";
         if(empty($id)) {
-            $supervisor = new EntitySupervisor;
+            $supervisor = new ModuleManagerMailEntitySupervisor;
         } else {
-            $supervisor = new EntitySupervisor($id);
+            $supervisor = new ModuleManagerMailEntitySupervisor($id);
         }
         $time = time();
         $supervisor->nombres = $_POST["nombres"];
@@ -253,7 +253,7 @@ class ModuleManagerMailControllersSupervisor extends CoreControllers
         if(empty($id)) {
             $error["msg"] = _("Seleccione un registro valido.");
         } else {
-            $supervisor = new EntitySupervisor($id);
+            $supervisor = new ModuleManagerMailEntitySupervisor($id);
             if($supervisor->delete()) {
                 $error["msg"] = _("Se elimino el registro exitosamente.");
                 $error["error"] = false;

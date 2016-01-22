@@ -8,5 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Twig_Extensions_' => array($vendorDir . '/twig/extensions/lib'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
+    'SecurityLib' => array($vendorDir . '/ircmaxell/security-lib/lib'),
+    'RandomLib' => array($vendorDir . '/ircmaxell/random-lib/lib'),
     'JpGraph' => array($vendorDir . '/jpgraph/jpgraph/lib'),
 );

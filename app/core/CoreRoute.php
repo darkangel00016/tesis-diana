@@ -29,8 +29,6 @@ class CoreRoute {
 
     static function ini($twig) {
 
-        self::db();
-
         self::filter($twig);
 
         $module = (isset($_REQUEST["m"]))?$_REQUEST["m"]:"";
@@ -58,16 +56,20 @@ class CoreRoute {
     {
         $loader = new Twig_Loader_Filesystem(TEMPLATES);
         $loader->addPath(TEMPLATES . "module/user/", 'ModuleUser');
-        $loader->addPath(TEMPLATES . "module/login/", 'ModuleLogin');
         $loader->addPath(TEMPLATES . "modales/", 'Modal');
-        $loader->addPath(TEMPLATES . "module/managermail/", 'ModuleManagerMail');
+        ModuleManagerMailConfig::twig($loader);
+        ModuleLoginConfig::twig($loader);
         ModuleConfiguracionConfig::twig($loader);
         return $loader;
     }
 
     public static function getUserLogged() {
-        $usr = isset($_SESSION["usr"])?unserialize($_SESSION["usr"]):"";
-        return $usr;
+        $usr = isset($_SESSION["usr"])?$_SESSION["usr"]:"";
+        $usuario = null;
+        if(!empty($usr)) {
+            $usuario = new ModuleUserEntityUsuario($usr);
+        }
+        return $usuario;
     }
 
     public static function isAdmin() {
@@ -81,7 +83,7 @@ class CoreRoute {
 
     public static function isLogged() {
         $usr = isset($_SESSION["usr"])?$_SESSION["usr"]:"";
-        $usuario = new EntityUsuario;
+        $usuario = new ModuleUserEntityUsuario;
         $records = array();
         if(!empty($usr)) {
             $records = $usuario->find($usr->getId());
@@ -193,7 +195,7 @@ class CoreRoute {
         return $config->getData();
     }
 
-    private static function db()
+    public static function db()
     {
         $coreDb = new CoreDb(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
         try {

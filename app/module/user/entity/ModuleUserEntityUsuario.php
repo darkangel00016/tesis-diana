@@ -1,11 +1,12 @@
 <?php
-class EntityUsuario extends CoreORM
+class ModuleUserEntityUsuario extends CoreORM
 {
     public static $prefix = "";
-    protected $dbTable = "usuario";
-    protected $primaryKey = "id";
+    public static $table = "usuario";
+    public $dbTable = "usuario";
+    public $primaryKey = "id";
 
-    protected $dbFields = Array(
+    public $dbFields = Array(
         'id' => Array('int'),
         'usuario' => Array('text', 'required'),
         'passusuario' => Array('text'),
@@ -16,21 +17,24 @@ class EntityUsuario extends CoreORM
         'fecha_creacion' => Array('int'),
         'modificado_por' => Array('int'),
         'fecha_modificacion' => Array('int'),
-        'estado' => Array('int')
+        'estado' => Array('int'),
+        'check_code' => Array('int')
     );
 
     /**
-     * EntityUsuario constructor.
+     * ModuleUserEntityUsuario constructor.
      * @param string $primaryKey
      */
     public function __construct($primaryKey = "", $data = array())
     {
+        if(is_array($primaryKey)) {
+            $data =  $primaryKey;
+        }
         parent::__construct($data);
-        if(!empty($primaryKey)) {
+        if(!is_array($primaryKey) && !empty($primaryKey)) {
             $this->find($primaryKey);
         }
     }
-
 
     public function login($opciones = array()) {
         $where = "";
@@ -57,8 +61,20 @@ class EntityUsuario extends CoreORM
     // setup method to get all active users
     public function find($id)
     {
+        $result = $this->byId($id);
+        $isExist = false;
+        if($result) {
+            $this->isNew = false;
+            $isExist = true;
+        }
+        return $isExist;
+    }
+
+    // setup method to get all active users
+    public function findByField($value, $field)
+    {
         $db = CoreDb::getInstance();
-        $result = $db->query("SELECT * FROM ".$this->dbTable . " WHERE id = '".$id."'", 1);
+        $result = $db->query("SELECT * FROM ".$this->dbTable . " WHERE $field = '".$value."'", 1);
         $isExist = false;
         if($result) {
             foreach($this->dbFields as $key => $value) {
@@ -84,7 +100,7 @@ class EntityUsuario extends CoreORM
         }
         $result = $db->query("SELECT count(id) as total FROM ".$this->dbTable . $where, 1);
         $total = $result[0]["total"];
-        $result = $db->query("SELECT * FROM ".$this->dbTable . $where . " LIMIT ".(($pagina -1) * $items_by_page)."," . $items_by_page);
+        $result = $db->query("SELECT * FROM ".$this->dbTable . $where . (($items_by_page!=0)?" LIMIT ".(($pagina -1) * $items_by_page)."," . $items_by_page: ""));
         return array(
             "records" => $result,
             "total" => $total
@@ -133,5 +149,9 @@ class EntityUsuario extends CoreORM
 
     public function getEstado() {
         return $this->data["estado"];
+    }
+
+    public function getCheckCode() {
+        return $this->data["check_code"];
     }
 }
