@@ -107,7 +107,7 @@ class ModuleLoginHelpersLogin
         if(isset($code)) {
             $in = @$_SESSION['catpcha'] == $code;
             if(!$in) {
-                $error["msg"] = _("El código de validación no es valido {$_SESSION['catpcha']}.");
+                $error["msg"] = _("El código de validación no es valido.");
             }
         }
         if(!empty($email) && $in) {
@@ -158,7 +158,7 @@ class ModuleLoginHelpersLogin
         if(isset($check_code)) {
             $in = @$_SESSION['catpcha'] == $check_code;
             if(!$in) {
-                $error["msg"] = _("El código de validación no es valido {$_SESSION['catpcha']}.");
+                $error["msg"] = _("El código de validación no es valido.");
             }
         }
         if(!empty($email) && !empty($code) && !empty($password) && $in) {
@@ -168,7 +168,7 @@ class ModuleLoginHelpersLogin
                     $error["msg"] = _("Clave cambiada exitosamente.");
                     $error["error"] = false;
                 } else {
-                    $error["msg"] = _("código de confirmación es invalido {$usuario->passusuario}.");
+                    $error["msg"] = _("código de confirmación es invalido.");
                 }
                 $usuario->check_code = "";
                 $usuario->save();
