@@ -21,7 +21,8 @@ class CoreRoute {
         "admin" => array(
             "user/main/(index|listado|add|edit|delete|save)",
             "configuracion/main/(index|add|edit|delete|save)",
-            "managermail/(estudiante|supervisor)/(index|listado|add|edit|save|delete|import|model)"
+            "managermail/(estudiante|supervisor)/(index|listado|add|edit|save|delete|import|model)",
+            "managermail/boletin/(index|listado|add|edit|save|delete)"
         )
     );
 

@@ -58,8 +58,16 @@ class CoreConfig extends CoreSingleton
             "usuario" => _("Usuario")
         );
         $this->config["estado_user"] = array(
-            "1" => _("Activo"),
-            "0" => _("Inactivo")
+            "0" => _("Inactivo"),
+            "1" => _("Activo")
+        );
+        $this->config["tipo_boletin"] = array(
+            "m" => _("Manual"),
+            "p" => _("Programado")
+        );
+        $this->config["from_boletin"] = array(
+            "estudiantes" => _("Estudiantes"),
+            "supervisores" => _("Supervisores")
         );
         $urls = array();
         ModuleConfiguracionConfig::getUrls($urls);

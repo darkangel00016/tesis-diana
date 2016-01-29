@@ -61,3 +61,16 @@
         {% endif %}
     </ul>
 </li>
+<li class="treeview">
+    {% set url_boletin = 'index.php?m=ManagerMail&c=Boletin' %}
+    <a href="{{ get_url(url_boletin) }}">
+        <i class="fa fa-files-o"></i>
+        <span>{% trans %}Boletin{% endtrans %}</span>
+    </a>
+    <ul class="treeview-menu">
+        <li><a href="{{ get_url(url_boletin) }}"><i class="fa fa-circle-o"></i> {% trans %}Listado{% endtrans %}</a></li>
+        {% if user.getTipo == "admin" %}
+            <li><a href="{{ get_url(url_boletin ~ '&a=Add') }}"><i class="fa fa-circle-o"></i> {% trans %}Agregar nuevo{% endtrans %}</a></li>
+        {% endif %}
+    </ul>
+</li>

@@ -1670,5 +1670,15 @@ class CoreDb
     {
         return $this->_stmtErrorNo;
     }
+
+    public function errornostString()
+    {
+        return $this->_stmtError;
+    }
+
+    public function errornoString()
+    {
+        return $this->mysqli()->error;
+    }
 }
 // END class
