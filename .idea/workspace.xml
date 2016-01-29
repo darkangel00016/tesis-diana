@@ -545,7 +545,13 @@
       <option name="project" value="LOCAL" />
       <updated>1454100573244</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Configuracion del proyecto.">
+      <created>1454100683683</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1454100683683</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -588,7 +594,8 @@
     <MESSAGE value="Agregar recordar clave y mejorar el login." />
     <MESSAGE value="Correcciones." />
     <MESSAGE value="Se agrego parte de la funcionalidad de boletin." />
-    <option name="LAST_COMMIT_MESSAGE" value="Se agrego parte de la funcionalidad de boletin." />
+    <MESSAGE value="Configuracion del proyecto." />
+    <option name="LAST_COMMIT_MESSAGE" value="Configuracion del proyecto." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
